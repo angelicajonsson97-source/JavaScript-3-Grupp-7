@@ -1,0 +1,53 @@
+Table users {
+id integer [primary key]
+firstName verchar
+lastNme crachar
+role varchar
+email varchar
+created_at timestamp
+}
+
+Table recipes {
+id integer [primary key]
+user_id integer //foreign key
+title varchar
+description text [note: 'Flavour text of the recepie']
+instructions text [note: 'Content of the recepie']
+cook_time_minutes integer
+servings servings
+difficulty varchar
+calories integer
+published bool
+created_at timestamp
+updated_at timespamp
+}
+Ref: recipes.user_id > users.id //many to one
+
+Table comments {
+id integer [primary key]
+recipe_id integer
+user_id integer
+title varchar
+comment_text text [note: 'Comment of the recepie']
+likes integer
+dislikes integer
+created_at timestamp
+}
+Ref: comments.user_id > users.id //fr key
+Ref: comments.recipe_id > recipes.id //fr key
+
+Table ingredients {
+id integer [primary key]
+}
+
+Table recipe_ingredients {
+id integer [primary key]
+}
+
+Table categories {
+id integer [primary key]
+}
+
+Table recipe_categories {
+id integer [primary key]
+}

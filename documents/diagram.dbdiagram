@@ -1,0 +1,99 @@
+{
+  "version": "1.0.0",
+  "darkMode": true,
+  "gridEnabling": false,
+  "detailLevel": "All",
+  "tablePositions": [
+    {
+      "name": "users",
+      "schemaName": "public",
+      "x": -166,
+      "y": 927.0067976771508
+    },
+    {
+      "name": "recipes",
+      "schemaName": "public",
+      "x": -228,
+      "y": 1771.0067976771506
+    },
+    {
+      "name": "comments",
+      "schemaName": "public",
+      "x": 267,
+      "y": 588.9988707683858
+    },
+    {
+      "name": "ingredients",
+      "schemaName": "public",
+      "x": -228,
+      "y": 1201.0067976771506
+    },
+    {
+      "name": "recipe_ingredients",
+      "schemaName": "public",
+      "x": -228,
+      "y": 1657.0067976771506
+    },
+    {
+      "name": "categories",
+      "schemaName": "public",
+      "x": -228,
+      "y": 1429.0067976771506
+    },
+    {
+      "name": "recipe_categories",
+      "schemaName": "public",
+      "x": -228,
+      "y": 1543.0067976771506
+    }
+  ],
+  "tableGroupCollapseStates": [],
+  "stickyNoteLayouts": [],
+  "referencePaths": [
+    {
+      "firstFieldNames": [
+        "user_id"
+      ],
+      "firstTableName": "recipes",
+      "firstSchemaName": "public",
+      "firstRelation": "*",
+      "secondFieldNames": [
+        "id"
+      ],
+      "secondTableName": "users",
+      "secondSchemaName": "public",
+      "secondRelation": "1",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "user_id"
+      ],
+      "firstTableName": "comments",
+      "firstSchemaName": "public",
+      "firstRelation": "*",
+      "secondFieldNames": [
+        "id"
+      ],
+      "secondTableName": "users",
+      "secondSchemaName": "public",
+      "secondRelation": "1",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "recipe_id"
+      ],
+      "firstTableName": "comments",
+      "firstSchemaName": "public",
+      "firstRelation": "*",
+      "secondFieldNames": [
+        "id"
+      ],
+      "secondTableName": "recipes",
+      "secondSchemaName": "public",
+      "secondRelation": "1",
+      "checkPoints": []
+    }
+  ]
+}
