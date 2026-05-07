@@ -7,44 +7,38 @@
     {
       "name": "users",
       "schemaName": "public",
-      "x": -166,
-      "y": 927.0067976771508
+      "x": -228,
+      "y": 1216.5511872169664
     },
     {
       "name": "recipes",
       "schemaName": "public",
-      "x": -228,
-      "y": 1771.0067976771506
+      "x": -11.39453819714015,
+      "y": 690.1884275628771
     },
     {
       "name": "comments",
       "schemaName": "public",
-      "x": 267,
-      "y": 588.9988707683858
+      "x": 549.9132562323068,
+      "y": 1311.7547133601392
     },
     {
       "name": "ingredients",
       "schemaName": "public",
-      "x": -228,
-      "y": 1201.0067976771506
+      "x": 282.5700171067415,
+      "y": 1636.4285132446598
     },
     {
       "name": "recipe_ingredients",
       "schemaName": "public",
-      "x": -228,
-      "y": 1657.0067976771506
+      "x": -163.90246538486804,
+      "y": 1628.2733849747265
     },
     {
       "name": "categories",
       "schemaName": "public",
-      "x": -228,
-      "y": 1429.0067976771506
-    },
-    {
-      "name": "recipe_categories",
-      "schemaName": "public",
-      "x": -228,
-      "y": 1543.0067976771506
+      "x": 119.01079084743867,
+      "y": 1477.6325730197148
     }
   ],
   "tableGroupCollapseStates": [],

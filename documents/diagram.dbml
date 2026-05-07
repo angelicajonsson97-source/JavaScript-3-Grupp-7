@@ -38,16 +38,18 @@ Ref: comments.recipe_id > recipes.id //fr key
 
 Table ingredients {
 id integer [primary key]
+ingredient_name varchar
+created_at timestamp
+//may create category feild
 }
 
 Table recipe_ingredients {
 id integer [primary key]
+recipe_id integer
+ingredient_id integer
+
 }
 
 Table categories {
-id integer [primary key]
-}
-
-Table recipe_categories {
 id integer [primary key]
 }
