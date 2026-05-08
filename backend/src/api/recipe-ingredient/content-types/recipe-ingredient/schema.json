@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_ingredients",
+  "info": {
+    "singularName": "recipe-ingredient",
+    "pluralName": "recipe-ingredients",
+    "displayName": "recipe_ingredients"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "quantity": {
+      "type": "decimal"
+    },
+    "unit": {
+      "type": "string"
+    }
+  }
+}

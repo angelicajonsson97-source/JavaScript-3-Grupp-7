@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_reactions",
+  "info": {
+    "singularName": "recipe-reaction",
+    "pluralName": "recipe-reactions",
+    "displayName": "recipe_reactions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reaction_type": {
+      "type": "string"
+    }
+  }
+}

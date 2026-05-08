@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipes",
+  "info": {
+    "singularName": "recipe",
+    "pluralName": "recipes",
+    "displayName": "recipes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "image_url": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "cook_time_minutes": {
+      "type": "integer"
+    },
+    "servings": {
+      "type": "integer"
+    },
+    "difficulty": {
+      "type": "string"
+    },
+    "average_rating": {
+      "type": "decimal"
+    },
+    "rating_count": {
+      "type": "integer"
+    },
+    "likes_count": {
+      "type": "integer"
+    },
+    "published": {
+      "type": "boolean"
+    }
+  }
+}
