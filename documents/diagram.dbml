@@ -1,27 +1,46 @@
 Table users {
 id integer [primary key]
-first_name verchar
-last_name vrachar
-role varchar
-email varchar
+first_name varchar
+last_name varchar
+role varchar [note: 'admin, user']
+email varchar [unique]
 created_at timestamp
+updated_at timestamp
 }
 
 Table recipes {
 id integer [primary key]
 user_id integer //foreign key
 title varchar
+slug varchar [unique] //for SEO and url
 description text [note: 'Flavour text of the recepie']
-instructions text [note: 'Content of the recepie']
+image_url varchar //may become a Media realtion content type
 cook_time_minutes integer
-servings servings
-difficulty varchar
+servings integer
+difficulty varchar [note: 'easy, medium, hard']
 calories integer
+average_rating decimal
+rating_count integer
+likes_count integer [default: 0]
 published bool
 created_at timestamp
-updated_at timespamp
+updated_at timestamp
 }
 Ref: recipes.user_id > users.id //many to one
+
+Table recipe_steps {
+id integer [primary key]
+recipe_id integer
+step_number  integer
+instruction text
+image_url varchar
+
+indexes {
+(recipe_id, step_number) [unique]
+}
+}
+Ref: recipe_steps.recipe_id > recipes.id //fr
+
 
 Table comments {
 id integer [primary key]
@@ -29,17 +48,19 @@ recipe_id integer
 user_id integer
 title varchar
 comment_text text [note: 'Comment of the recepie']
-likes integer
-dislikes integer
+rating integer [note:'1-5 starts']
+likes_count integer [default: 0]
 created_at timestamp
+updated_at timestamp
 }
 Ref: comments.user_id > users.id //fr key
 Ref: comments.recipe_id > recipes.id //fr key
 
 Table ingredients {
 id integer [primary key]
-ingredient_name varchar
+ingredient_name varchar [unique]
 created_at timestamp
+updated_at timestamp
 //may create category feild
 }
 
@@ -47,22 +68,122 @@ Table recipe_ingredients {
 id integer [primary key]
 recipe_id integer
 ingredient_id integer
-quanity integer
+quantity decimal
 unit varchar
+created_at timestamp
+updated_at timestamp
+
+indexes {
+(recipe_id, ingredient_id) [unique]
+}
+
 }
 Ref: recipe_ingredients.recipe_id > recipes.id //fr
 Ref: recipe_ingredients.ingredient_id > ingredients.id //fr
 
 Table categories {
 id integer [primary key]
-category_name varchar
+category_name varchar [unique]
+slug varchar [unique]
 description text
+created_at timestamp
+updated_at timestamp
 }
 
 Table recipe_categories {
+id integer [primary key]
 recipe_id integer
 category_id integer
+created_at timestamp
+updated_at timestamp
+
+indexes {
+(recipe_id, category_id) [unique]
+}
 }
 Ref: recipe_categories.recipe_id > recipes.id //fr
 Ref: recipe_categories.category_id > categories.id //fr
 
+Table recipe_ratings {
+id integer [primary key]
+recipe_id integer
+user_id integer
+rating integer [note: '1-5 stars']
+created_at timestamp
+updated_at timestamp
+
+//prevents multiple ratings from one person
+indexes {
+(recipe_id, user_id) [unique]
+}
+}
+Ref: recipe_ratings.recipe_id > recipes.id
+Ref: recipe_ratings.user_id > users.id
+
+Table recipe_reactions {
+id integer [primary key]
+recipe_id integer
+user_id integer
+reaction_type varchar [note: 'like or something else in the future']
+created_at timestamp
+
+indexes {
+(recipe_id, user_id) [unique]
+}
+}
+Ref: recipe_reactions.recipe_id > recipes.id
+Ref: recipe_reactions.user_id > users.id
+
+Table comment_reactions {
+id integer [primary key]
+comment_id integer
+user_id integer
+reaction_type varchar [note: 'like or something else in the future']
+created_at timestamp
+
+indexes {
+(comment_id, user_id) [unique]
+}
+}
+Ref: comment_reactions.comment_id > comments.id
+Ref: comment_reactions.user_id > users.id
+
+Table recipe_reports{
+id integer [primary key]
+recipe_id integer
+user_id integer
+reason varchar
+description text
+status varchar [note: 'pending, resolved, dismissed']
+created_at timestamp
+reviewed_at timestamp
+
+indexes {
+(recipe_id, user_id) [unique]
+}
+
+}
+Ref: recipe_reports.recipe_id > recipes.id
+Ref: recipe_reports.user_id > users.id
+
+Table comment_reports{
+id integer [primary key]
+comment_id integer
+user_id integer
+reason varchar
+description text
+status varchar [note: 'pending, resolved, dismissed']
+created_at timestamp
+reviewed_at timestamp
+
+indexes {
+(comment_id, user_id) [unique]
+}
+
+}
+Ref: comment_reports.comment_id > comments.id
+Ref: comment_reports.user_id > users.id
+
+//can use polymorphic table for reports
+// but then the application would need to guaretnee integrity
+// by using two different content type for reports the database guarentees integrity
