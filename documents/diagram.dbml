@@ -14,7 +14,7 @@ user_id integer //foreign key
 title varchar
 slug varchar [unique] //for SEO and url
 description text [note: 'Flavour text of the recepie']
-image_url varchar //may become a Media realtion content type
+image_url varchar //may become a Media relation content type
 cook_time_minutes integer
 servings integer
 difficulty varchar [note: 'easy, medium, hard']
