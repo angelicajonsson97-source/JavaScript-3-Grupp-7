@@ -13,6 +13,12 @@
   "attributes": {
     "reaction_type": {
       "type": "string"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "recipe_reactions"
     }
   }
 }
