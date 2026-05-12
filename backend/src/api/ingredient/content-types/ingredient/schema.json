@@ -13,6 +13,12 @@
   "attributes": {
     "ingredient_name": {
       "type": "string"
+    },
+    "recipe_ingredient": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::recipe-ingredient.recipe-ingredient",
+      "inversedBy": "ingredient"
     }
   }
 }

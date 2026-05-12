@@ -16,6 +16,18 @@
     },
     "unit": {
       "type": "string"
+    },
+    "recipes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::recipe.recipe",
+      "mappedBy": "recipe_ingredients"
+    },
+    "ingredient": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ingredient.ingredient",
+      "mappedBy": "recipe_ingredient"
     }
   }
 }

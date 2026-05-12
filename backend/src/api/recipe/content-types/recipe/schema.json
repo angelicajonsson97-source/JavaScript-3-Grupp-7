@@ -54,6 +54,40 @@
     },
     "published": {
       "type": "boolean"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment"
+    },
+    "recipe_steps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-step.recipe-step"
+    },
+    "recipe_ingredients": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::recipe-ingredient.recipe-ingredient",
+      "inversedBy": "recipes"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "recipes"
+    },
+    "recipe_ratings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-rating.recipe-rating",
+      "mappedBy": "recipe"
+    },
+    "recipe_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-reaction.recipe-reaction",
+      "mappedBy": "recipe"
     }
   }
 }
