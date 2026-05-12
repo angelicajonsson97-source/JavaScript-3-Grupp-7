@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_steps",
+  "info": {
+    "singularName": "recipe-step",
+    "pluralName": "recipe-steps",
+    "displayName": "recipe_steps"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "step_number": {
+      "type": "integer"
+    },
+    "instruction": {
+      "type": "text"
+    },
+    "image_url": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

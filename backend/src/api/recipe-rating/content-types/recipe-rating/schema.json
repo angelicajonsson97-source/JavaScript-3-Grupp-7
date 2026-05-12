@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_ratings",
+  "info": {
+    "singularName": "recipe-rating",
+    "pluralName": "recipe-ratings",
+    "displayName": "recipe_rating"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rating": {
+      "type": "integer"
+    }
+  }
+}
