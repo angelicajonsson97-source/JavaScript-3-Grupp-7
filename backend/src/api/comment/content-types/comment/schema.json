@@ -16,6 +16,12 @@
     },
     "likes_count": {
       "type": "integer"
+    },
+    "comment_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-reaction.comment-reaction",
+      "mappedBy": "comment"
     }
   }
 }

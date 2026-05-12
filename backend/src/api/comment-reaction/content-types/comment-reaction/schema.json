@@ -13,6 +13,18 @@
   "attributes": {
     "reaction_type": {
       "type": "string"
+    },
+    "comment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::comment.comment",
+      "inversedBy": "comment_reactions"
+    },
+    "placeholder_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::placeholder-user.placeholder-user",
+      "inversedBy": "comment_reactions"
     }
   }
 }

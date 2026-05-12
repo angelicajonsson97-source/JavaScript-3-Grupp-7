@@ -88,6 +88,12 @@
       "relation": "oneToMany",
       "target": "api::recipe-reaction.recipe-reaction",
       "mappedBy": "recipe"
+    },
+    "placeholder_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::placeholder-user.placeholder-user",
+      "inversedBy": "recipes"
     }
   }
 }
