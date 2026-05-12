@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "placeholder_users",
+  "info": {
+    "singularName": "placeholder-user",
+    "pluralName": "placeholder-users",
+    "displayName": "placeholder_users"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "recipe_ratings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-rating.recipe-rating",
+      "mappedBy": "placeholder_user"
+    },
+    "recipes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe.recipe",
+      "mappedBy": "placeholder_user"
+    },
+    "recipe_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-reaction.recipe-reaction",
+      "mappedBy": "placeholder_user"
+    },
+    "comment_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-reaction.comment-reaction",
+      "mappedBy": "placeholder_user"
+    }
+  }
+}
