@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-react-dom'
+import { useParams } from 'react-router-dom'
 
 import useFetch from '../utils/useFetch'
 
 
 RecipePage.route = {
-  path: '/recipe/:slug'
+  path: '/recipe'
 }
 
 export default function RecipePage() {
 
-  const { slug } = useParams();
+  //const { slug } = useParams();
+
+  const slug = "classic-escargot-from-france";
 
   const [recipe, setRecipe] = useFetch(slug);
 }
