@@ -13,6 +13,18 @@
   "attributes": {
     "rating": {
       "type": "integer"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "recipe_ratings"
+    },
+    "placeholder_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::placeholder-user.placeholder-user",
+      "inversedBy": "recipe_ratings"
     }
   }
 }

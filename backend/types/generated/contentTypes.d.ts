@@ -462,6 +462,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
     slug: Schema.Attribute.UID<'category_name'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -481,6 +482,7 @@ export interface ApiCommentReactionCommentReaction
     draftAndPublish: true;
   };
   attributes: {
+    comment: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -490,6 +492,10 @@ export interface ApiCommentReactionCommentReaction
       'api::comment-reaction.comment-reaction'
     > &
       Schema.Attribute.Private;
+    placeholder_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::placeholder-user.placeholder-user'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     reaction_type: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -509,6 +515,10 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    comment_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-reaction.comment-reaction'
+    >;
     comment_text: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -549,6 +559,55 @@ export interface ApiIngredientIngredient extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe_ingredient: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::recipe-ingredient.recipe-ingredient'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPlaceholderUserPlaceholderUser
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'placeholder_users';
+  info: {
+    displayName: 'placeholder_users';
+    pluralName: 'placeholder-users';
+    singularName: 'placeholder-user';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    comment_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-reaction.comment-reaction'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    first_name: Schema.Attribute.String;
+    last_name: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::placeholder-user.placeholder-user'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    recipe_ratings: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-rating.recipe-rating'
+    >;
+    recipe_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-reaction.recipe-reaction'
+    >;
+    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
+    role: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -570,6 +629,10 @@ export interface ApiRecipeIngredientRecipeIngredient
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    ingredient: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::ingredient.ingredient'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -578,6 +641,7 @@ export interface ApiRecipeIngredientRecipeIngredient
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Decimal;
+    recipes: Schema.Attribute.Relation<'manyToMany', 'api::recipe.recipe'>;
     unit: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -606,8 +670,13 @@ export interface ApiRecipeRatingRecipeRating
       'api::recipe-rating.recipe-rating'
     > &
       Schema.Attribute.Private;
+    placeholder_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::placeholder-user.placeholder-user'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -635,8 +704,13 @@ export interface ApiRecipeReactionRecipeReaction
       'api::recipe-reaction.recipe-reaction'
     > &
       Schema.Attribute.Private;
+    placeholder_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::placeholder-user.placeholder-user'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     reaction_type: Schema.Attribute.String;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -685,6 +759,8 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
   };
   attributes: {
     average_rating: Schema.Attribute.Decimal;
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     cook_time_minutes: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -699,9 +775,29 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
       'api::recipe.recipe'
     > &
       Schema.Attribute.Private;
+    placeholder_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::placeholder-user.placeholder-user'
+    >;
     published: Schema.Attribute.Boolean;
     publishedAt: Schema.Attribute.DateTime;
     rating_count: Schema.Attribute.Integer;
+    recipe_ingredients: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::recipe-ingredient.recipe-ingredient'
+    >;
+    recipe_ratings: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-rating.recipe-rating'
+    >;
+    recipe_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-reaction.recipe-reaction'
+    >;
+    recipe_steps: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-step.recipe-step'
+    >;
     servings: Schema.Attribute.Integer;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
@@ -1282,6 +1378,7 @@ declare module '@strapi/strapi' {
       'api::comment-reaction.comment-reaction': ApiCommentReactionCommentReaction;
       'api::comment.comment': ApiCommentComment;
       'api::ingredient.ingredient': ApiIngredientIngredient;
+      'api::placeholder-user.placeholder-user': ApiPlaceholderUserPlaceholderUser;
       'api::recipe-ingredient.recipe-ingredient': ApiRecipeIngredientRecipeIngredient;
       'api::recipe-rating.recipe-rating': ApiRecipeRatingRecipeRating;
       'api::recipe-reaction.recipe-reaction': ApiRecipeReactionRecipeReaction;
