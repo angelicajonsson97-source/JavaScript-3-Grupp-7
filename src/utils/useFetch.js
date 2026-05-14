@@ -9,7 +9,7 @@ export default function useFetch(...urls) {
 
   //useCallback memorizes and resues the function between renders
   // instead of creating a new one every time.
-  //also only recreate update when urls change
+  //also only recreate update when url dependency change
   const update = useCallback(async () => {
 
     setError(null);

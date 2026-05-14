@@ -10,7 +10,9 @@ RecipePage.route = {
 
 export default function RecipePage() {
 
-  const { slug } = useParams();
+  //const { slug } = useParams();
 
-  const [recipe, setRecipe] = useFetch(slug);
+  const slug = ""
+
+  const [recipe, setRecipe] = useFetch('/api/' + slug);
 }
