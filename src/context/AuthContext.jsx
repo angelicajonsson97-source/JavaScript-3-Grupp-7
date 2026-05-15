@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import { getMe, logout as apiLogout } from '../services/strapiApi'
 
 const AuthContext = createContext(null)
@@ -35,4 +36,12 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   return useContext(AuthContext)
+}
+
+export function ProtectedRoute({ children, adminOnly = false }) {
+  const { user, loading } = useAuth()
+  if (loading) return <div className="page-loading">Laddar...</div>
+  if (!user) return <Navigate to="/login" replace />
+  if (adminOnly && user.role?.type !== 'admin') return <Navigate to="/" replace />
+  return children
 }
