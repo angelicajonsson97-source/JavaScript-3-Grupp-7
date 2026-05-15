@@ -185,3 +185,5 @@ export default function AdminPage() {
     </div>
   )
 }
+
+AdminPage.route = { path: '/admin', index: 4 }
