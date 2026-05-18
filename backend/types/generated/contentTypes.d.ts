@@ -531,6 +531,10 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe_rating: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::recipe-rating.recipe-rating'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -620,6 +624,7 @@ export interface ApiRecipeRatingRecipeRating
     draftAndPublish: true;
   };
   attributes: {
+    comment: Schema.Attribute.Relation<'oneToOne', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
