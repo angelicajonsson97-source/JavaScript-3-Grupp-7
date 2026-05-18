@@ -492,15 +492,15 @@ export interface ApiCommentReactionCommentReaction
       'api::comment-reaction.comment-reaction'
     > &
       Schema.Attribute.Private;
-    placeholder_user: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::placeholder-user.placeholder-user'
-    >;
     publishedAt: Schema.Attribute.DateTime;
     reaction_type: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -534,6 +534,10 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -563,51 +567,6 @@ export interface ApiIngredientIngredient extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::recipe-ingredient.recipe-ingredient'
     >;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiPlaceholderUserPlaceholderUser
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'placeholder_users';
-  info: {
-    displayName: 'placeholder_users';
-    pluralName: 'placeholder-users';
-    singularName: 'placeholder-user';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    comment_reactions: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::comment-reaction.comment-reaction'
-    >;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    email: Schema.Attribute.Email;
-    first_name: Schema.Attribute.String;
-    last_name: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::placeholder-user.placeholder-user'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    recipe_ratings: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::recipe-rating.recipe-rating'
-    >;
-    recipe_reactions: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::recipe-reaction.recipe-reaction'
-    >;
-    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
-    role: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -670,16 +629,16 @@ export interface ApiRecipeRatingRecipeRating
       'api::recipe-rating.recipe-rating'
     > &
       Schema.Attribute.Private;
-    placeholder_user: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::placeholder-user.placeholder-user'
-    >;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer;
     recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -704,16 +663,16 @@ export interface ApiRecipeReactionRecipeReaction
       'api::recipe-reaction.recipe-reaction'
     > &
       Schema.Attribute.Private;
-    placeholder_user: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::placeholder-user.placeholder-user'
-    >;
     publishedAt: Schema.Attribute.DateTime;
     reaction_type: Schema.Attribute.String;
     recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -775,10 +734,6 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
       'api::recipe.recipe'
     > &
       Schema.Attribute.Private;
-    placeholder_user: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::placeholder-user.placeholder-user'
-    >;
     published: Schema.Attribute.Boolean;
     publishedAt: Schema.Attribute.DateTime;
     rating_count: Schema.Attribute.Integer;
@@ -804,6 +759,10 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1319,10 +1278,14 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    comment_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-reaction.comment-reaction'
+    >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -1346,6 +1309,15 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    recipe_ratings: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-rating.recipe-rating'
+    >;
+    recipe_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-reaction.recipe-reaction'
+    >;
+    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
@@ -1378,7 +1350,6 @@ declare module '@strapi/strapi' {
       'api::comment-reaction.comment-reaction': ApiCommentReactionCommentReaction;
       'api::comment.comment': ApiCommentComment;
       'api::ingredient.ingredient': ApiIngredientIngredient;
-      'api::placeholder-user.placeholder-user': ApiPlaceholderUserPlaceholderUser;
       'api::recipe-ingredient.recipe-ingredient': ApiRecipeIngredientRecipeIngredient;
       'api::recipe-rating.recipe-rating': ApiRecipeRatingRecipeRating;
       'api::recipe-reaction.recipe-reaction': ApiRecipeReactionRecipeReaction;
