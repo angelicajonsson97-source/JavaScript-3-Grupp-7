@@ -65,10 +65,6 @@ $RECYCLE.BIN/
 # Logs and databases
 ############################
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 5adb672cdaf0d3f86791939bce33f46cbce208b2
 *.log
 *.sql
 *.sqlite
