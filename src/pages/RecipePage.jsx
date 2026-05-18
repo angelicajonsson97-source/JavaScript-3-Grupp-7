@@ -5,14 +5,16 @@ import useFetch from '../utils/useFetch'
 
 
 RecipePage.route = {
-  path: '/recipe'
+  path: '/recipe/:slug' //add slug
 }
 
 export default function RecipePage() {
 
-  //const { slug } = useParams();
+  const { slug } = useParams();
 
-  const slug = "classic-escargot-from-france";
+  //const slug = "classic-escargot-from-france";
 
-  const [recipe, setRecipe] = useFetch(slug);
+  const { recipe, loading, error, update } = useFetch('/api/recipes/' + slug);
+
+  
 }

@@ -20,11 +20,17 @@
       "target": "api::recipe.recipe",
       "inversedBy": "recipe_ratings"
     },
-    "placeholder_user": {
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::placeholder-user.placeholder-user",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "recipe_ratings"
+    },
+    "comment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::comment.comment",
+      "mappedBy": "recipe_rating"
     }
   }
 }

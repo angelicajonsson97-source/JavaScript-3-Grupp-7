@@ -89,10 +89,10 @@
       "target": "api::recipe-reaction.recipe-reaction",
       "mappedBy": "recipe"
     },
-    "placeholder_user": {
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::placeholder-user.placeholder-user",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "recipes"
     }
   }
