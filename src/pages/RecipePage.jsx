@@ -15,7 +15,11 @@ export default function RecipePage() {
   //const slug = "classic-escargot-from-france";
 
   const { data, loading, error } = useFetch(
-    `/api/recipes?filters[slug][$eq]=${slug}&populate=*`);
+    `/api/recipes?filters[slug][$eq]=${slug}`
+    + `&populate[recipe_steps]=*`
+    + `&populate[categories]=*`
+    + `&populate[comments]=*`
+    + `&populate[recipe_ingredients][populate]=ingredient`);
   
   console.log("raw recipe data:" + data);
   
@@ -27,10 +31,36 @@ export default function RecipePage() {
   if (error) return <p> Error loading recipe</p>
 
   if (!recipe) return <p>No recipe found</p>
+
+  const {
+    title,
+    average_rating,
+    cook_time_minutes,
+    difficulty,
+    likes_count,
+    description,
+    ingredients,
+  } = recipe;
   
   return (
     <>
-      <h1>{recipe.title}</h1>
+      <h1>{title}</h1>
+
+      <p>Rating: {average_rating}</p>
+      <p>Cooktime: {cook_time_minutes}</p>
+      <p>Difficulty: {difficulty}</p>
+      <p>Likes: {likes_count}</p>
+      <p>{description}</p>
+
+      <h2>Ingredients</h2>
+      <ul>
+        {ingredients.map(ingredient => <li
+          key={ingredient.documentId}>
+          {ingredient} { }
+          
+        </li>)}
+      </ul>
+
     </>
   )
 

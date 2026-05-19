@@ -25,9 +25,9 @@
     },
     "ingredient": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::ingredient.ingredient",
-      "mappedBy": "recipe_ingredient"
+      "inversedBy": "recipe_ingredients"
     }
   }
 }
