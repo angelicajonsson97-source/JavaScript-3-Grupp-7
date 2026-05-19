@@ -14,7 +14,22 @@ export default function RecipePage() {
 
   //const slug = "classic-escargot-from-france";
 
-  const { recipe, loading, error, update } = useFetch('/api/recipes/' + slug);
-
+  const { recipeData, loading, error } = useFetch(
+    `/api/recipes?filters[slug][$eq]=${slug}&populate=*`);
   
+  const recipe = recipeData?.[0]?.data?.[0];
+
+  console.log(recipe);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p> Error loading recipe</p>
+
+  if (!recipe) return <p>No recipe found</p>
+  
+  return (
+    <>
+      <h1>{recipe.attributes.title}</h1>
+    </>
+  )
+
 }
