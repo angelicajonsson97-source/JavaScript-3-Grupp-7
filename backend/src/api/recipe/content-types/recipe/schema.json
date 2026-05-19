@@ -58,24 +58,26 @@
     "comments": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::comment.comment"
+      "target": "api::comment.comment",
+      "mappedBy": "recipe"
     },
     "recipe_steps": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::recipe-step.recipe-step"
+      "target": "api::recipe-step.recipe-step",
+      "mappedBy": "recipe"
     },
     "recipe_ingredients": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "oneToMany",
       "target": "api::recipe-ingredient.recipe-ingredient",
-      "inversedBy": "recipes"
+      "mappedBy": "recipe"
     },
-    "category": {
+    "categories": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToMany",
       "target": "api::category.category",
-      "inversedBy": "recipes"
+      "mappedBy": "recipe"
     },
     "recipe_ratings": {
       "type": "relation",

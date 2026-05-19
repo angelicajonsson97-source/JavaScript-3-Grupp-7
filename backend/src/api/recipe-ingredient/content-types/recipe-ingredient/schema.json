@@ -17,11 +17,11 @@
     "unit": {
       "type": "string"
     },
-    "recipes": {
+    "recipe": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::recipe.recipe",
-      "mappedBy": "recipe_ingredients"
+      "inversedBy": "recipe_ingredients"
     },
     "ingredient": {
       "type": "relation",
