@@ -14,11 +14,11 @@
     "ingredient_name": {
       "type": "string"
     },
-    "recipe_ingredient": {
+    "recipe_ingredients": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::recipe-ingredient.recipe-ingredient",
-      "inversedBy": "ingredient"
+      "mappedBy": "ingredient"
     }
   }
 }

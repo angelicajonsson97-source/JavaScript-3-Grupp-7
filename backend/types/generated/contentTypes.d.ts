@@ -568,8 +568,8 @@ export interface ApiIngredientIngredient extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    recipe_ingredient: Schema.Attribute.Relation<
-      'oneToOne',
+    recipe_ingredients: Schema.Attribute.Relation<
+      'oneToMany',
       'api::recipe-ingredient.recipe-ingredient'
     >;
     updatedAt: Schema.Attribute.DateTime;
@@ -594,7 +594,7 @@ export interface ApiRecipeIngredientRecipeIngredient
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     ingredient: Schema.Attribute.Relation<
-      'oneToOne',
+      'manyToOne',
       'api::ingredient.ingredient'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
