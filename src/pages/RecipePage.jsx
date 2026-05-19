@@ -16,10 +16,14 @@ export default function RecipePage() {
 
   const { data, loading, error } = useFetch(
     `/api/recipes?filters[slug][$eq]=${slug}`
-    + `&populate[recipe_steps]=*`
-    + `&populate[categories]=*`
-    + `&populate[comments]=*`
-    + `&populate[recipe_ingredients][populate]=ingredient`);
+    + `&populate[user][populate]=*`
+    + `&populate[categories][populate]`
+    + `&populate[comments][populate]=*`
+    + `&populate[recipe_reactions][populate]`
+    + `&populate[recipe_steps][populate]`
+    + `&populate[recipe_ratings][populate]`
+    + `&populate[recipe_ingredients][populate]=ingredient`
+  );
   
   console.log("raw recipe data:" + data);
   
