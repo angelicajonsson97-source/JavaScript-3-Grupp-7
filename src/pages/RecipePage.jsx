@@ -14,11 +14,13 @@ export default function RecipePage() {
 
   //const slug = "classic-escargot-from-france";
 
-  const { recipeData, loading, error } = useFetch(
+  const { data, loading, error } = useFetch(
     `/api/recipes?filters[slug][$eq]=${slug}&populate=*`);
   
-  const recipe = recipeData?.[0]?.data?.[0];
-
+  console.log("raw recipe data:" + data);
+  
+  const recipe = data?.[0]?.data?.[0]
+ 
   console.log(recipe);
 
   if (loading) return <p>Loading...</p>;
@@ -28,7 +30,7 @@ export default function RecipePage() {
   
   return (
     <>
-      <h1>{recipe.attributes.title}</h1>
+      <h1>{recipe.title}</h1>
     </>
   )
 

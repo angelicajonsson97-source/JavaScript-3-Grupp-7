@@ -462,7 +462,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     slug: Schema.Attribute.UID<'category_name'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -531,6 +531,7 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     recipe_rating: Schema.Attribute.Relation<
       'oneToOne',
       'api::recipe-rating.recipe-rating'
@@ -604,7 +605,7 @@ export interface ApiRecipeIngredientRecipeIngredient
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Decimal;
-    recipes: Schema.Attribute.Relation<'manyToMany', 'api::recipe.recipe'>;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     unit: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -704,6 +705,7 @@ export interface ApiRecipeStepRecipeStep extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     step_number: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -723,7 +725,10 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
   };
   attributes: {
     average_rating: Schema.Attribute.Decimal;
-    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
+    categories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::category.category'
+    >;
     comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     cook_time_minutes: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
@@ -743,7 +748,7 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     rating_count: Schema.Attribute.Integer;
     recipe_ingredients: Schema.Attribute.Relation<
-      'manyToMany',
+      'oneToMany',
       'api::recipe-ingredient.recipe-ingredient'
     >;
     recipe_ratings: Schema.Attribute.Relation<

@@ -34,6 +34,12 @@
       "relation": "oneToOne",
       "target": "api::recipe-rating.recipe-rating",
       "inversedBy": "comment"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "comments"
     }
   }
 }
