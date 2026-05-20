@@ -12,8 +12,11 @@ export default function RecipePage() {
 
   const { slug } = useParams();
 
+  const [displayRecipeData, setDisplayRecipeData] = useState(null);
+
   //const slug = "classic-escargot-from-france";
 
+  //fetch data
   const { data, loading, error } = useFetch(
     `/api/recipes?filters[slug][$eq]=${slug}`
     + `&populate[user][populate]=*`
@@ -24,18 +27,24 @@ export default function RecipePage() {
     + `&populate[recipe_ratings][populate]`
     + `&populate[recipe_ingredients][populate]=ingredient`
   );
+  console.log("raw recipe data: ", data);
   
-  console.log("raw recipe data:" + data);
-  
-  const recipe = data?.[0]?.data?.[0]
- 
-  console.log(recipe);
+  //select the useful data from the raw data
+  const processedRecipeData = data?.[0]?.data?.[0]
+  console.log("processed data: ", processedRecipeData);
+
+  //set processed data to state for rendering
+  useEffect(() => { 
+    if (processedRecipeData) { 
+      setDisplayRecipeData(processedRecipeData)
+    }
+  }, [processedRecipeData])
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p> Error loading recipe</p>
+  if (!displayRecipeData) return <p>No recipe found</p>
 
-  if (!recipe) return <p>No recipe found</p>
-
+  //deconstruct data from use state
   const {
     title,
     average_rating,
@@ -48,7 +57,7 @@ export default function RecipePage() {
     recipe_ingredients,
     recipe_steps,
     comments
-  } = recipe;
+  } = displayRecipeData;
 
 
   //counts the number of bookmarks in recipe_reactions
