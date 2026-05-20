@@ -1,6 +1,10 @@
 # Receptsamling Grupp 7 JavaScript 3 projekt 
 
 Versioner:
-Node: 24.15.0
-npm: 11.12.1
+* Node: 24.15.0
+* npm: 11.12.1
+
+Strapi login information:
+* email: test@test.com
+* password: Admin123
 
