@@ -16,6 +16,30 @@
     },
     "likes_count": {
       "type": "integer"
+    },
+    "comment_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-reaction.comment-reaction",
+      "mappedBy": "comment"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "comments"
+    },
+    "recipe_rating": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::recipe-rating.recipe-rating",
+      "inversedBy": "comment"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "comments"
     }
   }
 }

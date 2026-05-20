@@ -499,7 +499,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     slug: Schema.Attribute.UID<'category_name'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -519,6 +519,7 @@ export interface ApiCommentReactionCommentReaction
     draftAndPublish: true;
   };
   attributes: {
+    comment: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -533,6 +534,10 @@ export interface ApiCommentReactionCommentReaction
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -547,6 +552,10 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    comment_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-reaction.comment-reaction'
+    >;
     comment_text: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -559,9 +568,18 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
+    recipe_rating: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::recipe-rating.recipe-rating'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -587,8 +605,8 @@ export interface ApiIngredientIngredient extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    recipe_ingredient: Schema.Attribute.Relation<
-      'oneToOne',
+    recipe_ingredients: Schema.Attribute.Relation<
+      'oneToMany',
       'api::recipe-ingredient.recipe-ingredient'
     >;
     updatedAt: Schema.Attribute.DateTime;
@@ -613,7 +631,7 @@ export interface ApiRecipeIngredientRecipeIngredient
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     ingredient: Schema.Attribute.Relation<
-      'oneToOne',
+      'manyToOne',
       'api::ingredient.ingredient'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -624,7 +642,7 @@ export interface ApiRecipeIngredientRecipeIngredient
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.Decimal;
-    recipes: Schema.Attribute.Relation<'manyToMany', 'api::recipe.recipe'>;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     unit: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -644,6 +662,7 @@ export interface ApiRecipeRatingRecipeRating
     draftAndPublish: true;
   };
   attributes: {
+    comment: Schema.Attribute.Relation<'oneToOne', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -659,6 +678,10 @@ export interface ApiRecipeRatingRecipeRating
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -689,6 +712,10 @@ export interface ApiRecipeReactionRecipeReaction
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -715,6 +742,7 @@ export interface ApiRecipeStepRecipeStep extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
     step_number: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -734,7 +762,10 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
   };
   attributes: {
     average_rating: Schema.Attribute.Decimal;
-    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
+    categories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::category.category'
+    >;
     comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     cook_time_minutes: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
@@ -754,7 +785,7 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     rating_count: Schema.Attribute.Integer;
     recipe_ingredients: Schema.Attribute.Relation<
-      'manyToMany',
+      'oneToMany',
       'api::recipe-ingredient.recipe-ingredient'
     >;
     recipe_ratings: Schema.Attribute.Relation<
@@ -775,6 +806,10 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -1290,10 +1325,14 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    comment_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-reaction.comment-reaction'
+    >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -1317,6 +1356,15 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    recipe_ratings: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-rating.recipe-rating'
+    >;
+    recipe_reactions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::recipe-reaction.recipe-reaction'
+    >;
+    recipes: Schema.Attribute.Relation<'oneToMany', 'api::recipe.recipe'>;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',

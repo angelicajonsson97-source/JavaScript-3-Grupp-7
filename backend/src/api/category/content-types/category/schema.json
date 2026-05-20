@@ -18,11 +18,11 @@
       "type": "uid",
       "targetField": "category_name"
     },
-    "recipes": {
+    "recipe": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToOne",
       "target": "api::recipe.recipe",
-      "mappedBy": "category"
+      "inversedBy": "categories"
     }
   }
 }

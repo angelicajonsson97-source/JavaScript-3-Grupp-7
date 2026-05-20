@@ -19,6 +19,12 @@
       "relation": "manyToOne",
       "target": "api::recipe.recipe",
       "inversedBy": "recipe_reactions"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "recipe_reactions"
     }
   }
 }
