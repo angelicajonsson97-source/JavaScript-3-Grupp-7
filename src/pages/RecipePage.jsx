@@ -46,6 +46,29 @@ export default function RecipePage() {
   if (error) return <p> Error loading recipe</p>
   if (!displayRecipeData) return <p>No recipe found</p>
 
+  //update user rating
+
+  async function sendRating(ratingValue) {
+    try { 
+      await fetch("/api/recipe-ratings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          data: {
+            rating: ratingValue,
+            recipe: displayRecipeData.documentId
+          }
+        })
+      })
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
+
   //deconstruct data from use state
   const {
     title,
@@ -88,11 +111,19 @@ export default function RecipePage() {
 
       {/* renders user comment and rating */}
       
-      <form onSubmit={sendRating}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        sendRating(userRating);
+      }}>
         <label>
-          <input type="text" value={userRating} onChange={updateUserComment} />
+          <input
+            type="text"
+            value={userRating}
+            min="0"
+            max="5"
+            onChange={(e) => setUserRating(Number(e.target.value))} />
         </label>
-        
+        <button type="submit">Submit Rating</button>
       </form>
 
       {/* renders ingredients */}
