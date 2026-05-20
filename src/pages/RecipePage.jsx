@@ -14,6 +14,7 @@ export default function RecipePage() {
 
   const [displayRecipeData, setDisplayRecipeData] = useState(null);
 
+  const [userRating, setUserRating] = useState(0);
   //const slug = "classic-escargot-from-france";
 
   //fetch data
@@ -21,9 +22,10 @@ export default function RecipePage() {
     `/api/recipes?filters[slug][$eq]=${slug}`
     + `&populate[user][populate]=*`
     + `&populate[categories][populate]`
+    + `&populate[comments][sort][0]=likes_count:desc` //sorts by likes using strapi
     + `&populate[comments][populate]=*`
     + `&populate[recipe_reactions][populate]`
-    + `&populate[recipe_steps][populate]`
+    + `&populate[recipe_steps][sort][0]=step_number:asc` //sorts by step using strapi
     + `&populate[recipe_ratings][populate]`
     + `&populate[recipe_ingredients][populate]=ingredient`
   );
@@ -66,8 +68,10 @@ export default function RecipePage() {
   ).length || 0;
 
   //sorts the recipe steps by number
-  const instructions = recipe_steps?.sort(
-    (a, b) => a.step_number - b.step_number) || [];
+  //const instructions = recipe_steps?.sort(
+  // (a, b) => a.step_number - b.step_number) || [];
+  
+  const instructions = recipe_steps || [];
   
   return (
     <>
@@ -81,6 +85,15 @@ export default function RecipePage() {
       <p>Bookmarks: {bookmarkCount}</p>
 
       <p>{description}</p>
+
+      {/* renders user comment and rating */}
+      
+      <form onSubmit={sendRating}>
+        <label>
+          <input type="text" value={userRating} onChange={updateUserComment} />
+        </label>
+        
+      </form>
 
       {/* renders ingredients */}
       <h2>Ingredients</h2>
