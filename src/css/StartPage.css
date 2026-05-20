@@ -1,0 +1,171 @@
+:root {
+  --fir-bac: #B7B3A1;
+  --sec-bac: #D1CA98;
+  --first-bac: #EDBF85;
+  --text: #7B3E19;
+  --rubriker: #482728;
+}
+
+/* HERO SECTION */
+.hero-section {
+  background-color: var(--first-bac);
+  color: var(--text);
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.hero-section h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--rubriker);
+}
+
+.hero-section h3 {
+  font-size: 1.0rem;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.hero-section p {
+  font-size: 0.8rem;
+  margin-bottom: 30px;
+  color: var(--text);
+}
+
+.hero-section .searchbar {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 28px;
+  font-size: 1.0rem;
+
+  background-color: #fff;
+  color: var(--text);
+
+  border: 2px solid var(--rubriker);
+  border-radius: 50px;
+  /* rundad */
+  outline: none;
+
+  display: block;
+  margin: 0 auto;
+  /* centrerar */
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+
+/* SEARCH RESULTS */
+.recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.recipe-card {
+  background-color: var(--fir-bac);
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-card h2 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: var(--rubriker);
+}
+
+.recipe-card p {
+  font-size: 0.8rem;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+/* FEATURED SECTION */
+.featured-section {
+  background-color: var(--fir-bac);
+  color: var(--text);
+  padding: 50px 20px;
+}
+
+.featured-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  text-align: left;
+  color: var(--rubriker);
+}
+
+.featured-section .recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.featured-card {
+  background-color: var(--sec-bac);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.featured-card h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--rubriker);
+}
+
+.featured-card p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 600px) {
+  .hero-section {
+    padding: 30px 15px;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section p {
+    font-size: 1.1rem;
+  }
+
+  .hero-section .searchbar {
+    max-width: 90%;
+    padding: 14px 18px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .recipe-card {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 600px) {
+  .featured-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .featured-card {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .featured-image {
+    height: auto;
+  }
+}
