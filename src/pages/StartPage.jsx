@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Searchbar from "../components/searchbar";
 import "../css/StartPage.css";
+import { Link } from "react-router-dom";
 
 StartPage.route = {
   path: '/',
@@ -15,6 +16,7 @@ export default function StartPage() {
   const [loading, setLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
   const [featured, setFeatured] = useState([]);
+  const [mostLiked, setMostLiked] = useState([]);
 
   // Debounce the search query to avoid excessive API calls
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function StartPage() {
         `/api/recipes?filters[$or][0][title][$containsi]=${q}` +
         `&filters[$or][1][description][$containsi]=${q}` +
         `&filters[$or][2][categories][category_name][$containsi]=${q}` +
+        `&filters[$or][3][recipe_ingredients][ingredient][ingredient_name][$containsi]=${q}` +
         `&populate=*`
       );
       const data = await res.json();
@@ -55,13 +58,23 @@ export default function StartPage() {
   useEffect(() => {
     async function fetchFeatured() {
       const res = await fetch(
-      `/api/recipes?sort=likes_count:desc&pagination[limit]=3&populate=*`
+        `/api/recipes?sort=createdAt:desc&pagination[limit]=3&populate=*`
       );
 
       const data = await res.json();
       setFeatured(data.data || []);
     }
     fetchFeatured();
+  }, []);
+
+  // API_call to fetch most liked recipes
+  useEffect(() => {
+    async function fetchMostLiked() {
+      const res = await fetch(`/api/recipes/most-liked`);
+      const data = await res.json();
+      setMostLiked(data || []);
+    }
+    fetchMostLiked();
   }, []);
 
   return (
@@ -89,11 +102,13 @@ export default function StartPage() {
         {debouncedQuery && (
           <div className="recipe-list">
             {recipes.map((recipe) => (
-              <div key={recipe.id} className="recipe-card">
-                <h2>{recipe.title}</h2>
-                <p>Cook time: {recipe.cook_time_minutes} min</p>
-                <p>Difficulty: {recipe.difficulty}</p>
-              </div>
+              <Link to={`/recipes/${recipe.slug}`} key={recipe.id} className="recipe-card">
+                <div className="recipe-card-content">
+                  <h2>{recipe.title}</h2>
+                  <p>⏱ {recipe.cook_time_minutes} min</p>
+                  <p>Difficulty: {recipe.difficulty}</p>
+                </div>
+              </Link>
             ))}
           </div>
         )}
@@ -105,7 +120,8 @@ export default function StartPage() {
 
         <div className="featured-list">
           {featured.map((recipe) => (
-            <div key={recipe.id} className="featured-card">
+            <Link to={`/recipes/${recipe.slug}`} key={recipe.id} className="featured-card">
+             <div className="featured-card-content">
               <h3>{recipe.title}</h3>
 
               {recipe.image_url && (
@@ -126,11 +142,41 @@ export default function StartPage() {
                 <span>⏱ {recipe.cook_time_minutes} min</span>
                 <span> • </span>
                 <span>👍{recipe.recipe_reactions?.filter(r => r.reaction_type === "like").length}</span>
+                </div>
               </div>
-            </div>
+            </Link>
 
           ))}
 
+        </div>
+      </section>
+
+      {/* Most liked – recept */}
+      <section className="most-liked-section">
+        <h2>Most Liked Recipes</h2>
+
+        <div className="most-liked-list">
+          {mostLiked.slice(0, 3).map((recipe) => (
+            <Link to={`/recipes/${recipe.slug}`} key={recipe.id} className="most-liked-card">
+              
+              <div className="most-liked-card-content">
+                <h3>{recipe.title}</h3>
+              {recipe.image_url && (
+                <img
+                  src={recipe.image_url}
+                  alt={recipe.title}
+                  className="most-liked-image"
+                />
+              )}
+
+              <div className="recipe-meta">
+                <span>⏱ {recipe.cook_time_minutes} min</span>
+                <span> • </span>
+                <span>👍 {recipe.likes}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
     </>
