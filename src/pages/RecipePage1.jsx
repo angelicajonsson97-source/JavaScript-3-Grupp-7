@@ -48,6 +48,7 @@ export default function RecipePage() {
 
   //update user rating
 
+  console.log("Id: ",displayRecipeData.id);
   async function sendRating(ratingValue) {
     try { 
       await fetch("/api/recipe-ratings", {
@@ -59,7 +60,7 @@ export default function RecipePage() {
           data: {
             rating: ratingValue,
             recipe: displayRecipeData.documentId
-          }
+            }
         })
       })
     }
