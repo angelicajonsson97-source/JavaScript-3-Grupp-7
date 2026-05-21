@@ -1,0 +1,101 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipes",
+  "info": {
+    "singularName": "recipe",
+    "pluralName": "recipes",
+    "displayName": "recipes"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "image_url": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "cook_time_minutes": {
+      "type": "integer"
+    },
+    "servings": {
+      "type": "integer"
+    },
+    "difficulty": {
+      "type": "string"
+    },
+    "average_rating": {
+      "type": "decimal"
+    },
+    "rating_count": {
+      "type": "integer"
+    },
+    "likes_count": {
+      "type": "integer"
+    },
+    "published": {
+      "type": "boolean"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "recipe"
+    },
+    "recipe_steps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-step.recipe-step",
+      "mappedBy": "recipe"
+    },
+    "recipe_ingredients": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-ingredient.recipe-ingredient",
+      "mappedBy": "recipe"
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category.category",
+      "mappedBy": "recipe"
+    },
+    "recipe_ratings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-rating.recipe-rating",
+      "mappedBy": "recipe"
+    },
+    "recipe_reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe-reaction.recipe-reaction",
+      "mappedBy": "recipe"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "recipes"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_reactions",
+  "info": {
+    "singularName": "recipe-reaction",
+    "pluralName": "recipe-reactions",
+    "displayName": "recipe_reactions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reaction_type": {
+      "type": "string"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "recipe_reactions"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "recipe_reactions"
+    }
+  }
+}

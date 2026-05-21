@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comment_reactions",
+  "info": {
+    "singularName": "comment-reaction",
+    "pluralName": "comment-reactions",
+    "displayName": "comment_reactions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reaction_type": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::comment.comment",
+      "inversedBy": "comment_reactions"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "comment_reactions"
+    }
+  }
+}

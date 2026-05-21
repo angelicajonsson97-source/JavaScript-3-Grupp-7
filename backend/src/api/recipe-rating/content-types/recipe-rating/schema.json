@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipe_ratings",
+  "info": {
+    "singularName": "recipe-rating",
+    "pluralName": "recipe-ratings",
+    "displayName": "recipe_rating"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rating": {
+      "type": "integer"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::recipe.recipe",
+      "inversedBy": "recipe_ratings"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "recipe_ratings"
+    },
+    "comment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::comment.comment",
+      "mappedBy": "recipe_rating"
+    }
+  }
+}

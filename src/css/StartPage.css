@@ -1,0 +1,223 @@
+:root {
+  --fir-bac: #B7B3A1;
+  --sec-bac: #D1CA98;
+  --first-bac: #EDBF85;
+  --text: #7B3E19;
+  --rubriker: #482728;
+}
+
+/* HERO SECTION */
+.hero-section {
+  background-color: var(--first-bac);
+  color: var(--text);
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.hero-section h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--rubriker);
+}
+
+.hero-section h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.hero-section p {
+  font-size: 0.8rem;
+  margin-bottom: 30px;
+  color: var(--text);
+}
+
+.hero-section .searchbar {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  background-color: #fff;
+  color: var(--text);
+  border: 2px solid var(--rubriker);
+  border-radius: 50px;
+  outline: none;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* SEARCH RESULTS */
+
+.recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.recipe-card {
+  background-color: var(--fir-bac);
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* FIXAR LINK */
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-card h2 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: var(--rubriker);
+}
+
+.recipe-card p {
+  font-size: 0.8rem;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+/* FEATURED */
+.featured-section {
+  background-color: var(--fir-bac);
+  color: var(--text);
+  padding: 50px 20px;
+}
+
+.featured-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  text-align: left;
+  color: var(--rubriker);
+}
+
+.featured-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.featured-card {
+  background-color: var(--sec-bac);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* FIXAR LINK */
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.featured-card h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--rubriker);
+}
+
+.featured-card p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+.featured-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* MOST LIKED */
+.most-liked-section {
+  background-color: var(--sec-bac);
+  color: var(--text);
+  padding: 50px 20px;
+}
+
+.most-liked-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  text-align: left;
+  color: var(--rubriker);
+}
+
+.most-liked-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.most-liked-card {
+  background-color: var(--fir-bac);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* FIXAR LINK */
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.most-liked-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.most-liked-card h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--rubriker);
+}
+
+.most-liked-card p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+.most-liked-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 600px) {
+
+  .recipe-card,
+  .featured-card,
+  .most-liked-card {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+}
