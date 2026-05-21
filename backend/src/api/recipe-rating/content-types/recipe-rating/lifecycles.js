@@ -1,24 +1,26 @@
 module.exports = {
+
   async afterCreate(event) { 
+
     const { result } = event;
+
     await strapi
     .service('api::recipe.recipe')
-    .updateRecipeAverage(result.recipe.id);
+    .addRatingToAverage({
+        recipeId: result.recipe.id,
+        rating: result.rating
+    });
   },
 
-  async afterDelete(event) { 
+  async afterDelete(event) {
+
     const { result } = event;
     
     await strapi
-    .service('api::recipe.recipe')
-    .updateRecipeAverage(result.recipe.id);
-  
-  },
-
-  async afterUpdate(event) {
-    const { result } = event;
-    await strapi
-    .service('api::recipe.recipe')
-    .updateRecipeAverage(result.recipe.id);
+      .service('api::recipe.recipe')
+      .removeRatingFromAverage({
+        recipeId: result.recipe.id,
+        rating: result.rating
+      });
   }
 }
