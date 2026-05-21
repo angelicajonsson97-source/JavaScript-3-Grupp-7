@@ -13,51 +13,79 @@ module.exports = createCoreService(
 
     async addRatingToAverage({ recipeId, rating }) {
 
-      console.log("recipeId in service: ", recipeId);
+      const recipe = await strapi.entityService.findOne(
+        'api::recipe.recipe',
+        recipeId
+      );
 
-      const recipe = await strapi.db.query('api::recipe.recipe').findOne({
-        where: { documentId: recipeId }
-      });
+      if (!recipe) {
+        strapi.log.error(`Recipe not found: ${recipeId}`);
+        return;
+      }
 
-      console.log("recipe in service: ", recipe);
-      const newRatingCount = recipe.rating_count + 1;
+      console.log("recipe in service:", recipe);
+
+      const newCount = recipe.rating_count + 1;
+
+      const newAverage =
+        (
+          (recipe.average_rating * recipe.rating_count)
+          + rating
+        )
+        /
+        newCount;
       
-      const newAverageRating = ((recipe.average_rating * recipe.rating_count) + rating) / newRatingCount; 
+      console.log("made it here");
 
-      await strapi.db.query('api::recipe.recipe').update({
-        where: { documentId: recipeId },
-        data: {
-          average_rating: Number(newAverageRating.toFixed(1)),
-          rating_count: newRatingCount
+      await strapi.entityService.update(
+        'api::recipe.recipe',
+        recipeId,
+        {
+          data: {
+            average_rating: Number(newAverage.toFixed(1)),
+            rating_count: newCount
+          },
+          state: {skipAvg: true}
         }
-      });
+      );
     },
 
     async removeRatingFromAverage({ recipeId, rating }) {
 
-      console.log("recipeId in service: ", recipeId);
-      const recipe = await strapi.db.query('api::recipe.recipe').findOne({
-        where: { documentId: recipeId }
-      });
+      const recipe = await strapi.entityService.findOne(
+        'api::recipe.recipe',
+        recipeId
+      );
 
-      console.log("pre rating count: ", recipe.rating_count);
+      if (!recipe) {
+        strapi.log.error(`Recipe not found: ${recipeId}`);
+        return;
+      }
 
-      const newRatingCount = recipe.rating_count - 1;
+      const newCount = recipe.rating_count - 1;
 
-      console.log("past rating count: ", newRatingCount);
+      const newAverage =
+        newCount > 0
+          ?
+          (
+            (recipe.average_rating * recipe.rating_count)
+            - rating
+          )
+          /
+          newCount
+          : 0;
 
-      const newAverageRating = newRatingCount > 0 ?
-        ((recipe.average_rating * recipe.rating_count) - rating) / newRatingCount
-        : 0;
-      
-      await strapi.db.query('api::recipe.recipe').update({
-        where: { documentId: recipeId },
-        data: {
-          average_rating: Number(newAverageRating.toFixed(1)),
-            rating_count: newRatingCount
-          }
+      await strapi.entityService.update(
+        'api::recipe.recipe',
+        recipeId,
+        {
+          data: {
+            average_rating: Number(newAverage.toFixed(1)),
+            rating_count: newCount
+          },
+          state: {skipAvg: true}
         }
-      )
+      );
     }
   })
 );

@@ -1,33 +1,26 @@
 module.exports = {
-
-  async afterCreate(event) { 
-
+  async afterCreate(event) {
+    if (event.state?.skipAvg) return;
     const { result } = event;
 
-    console.log("result: ", result);
-    console.log("event: ", event);
-
-    //console.log("recipe:", event.params.data.recipe.set[0].id );
-
-    //const recipeId = event.params.data.recipe.set[0].id;
+    console.log("event:", event);
 
     const recipeId = result.recipeId;
     const rating = result.rating;
 
-    console.log("recipeId: ", recipeId);
+    console.log("event result", result);
     await strapi
-    .service('api::recipe.recipe')
-    .addRatingToAverage({
+      .service('api::recipe.recipe')
+      .addRatingToAverage({
         recipeId,
         rating
-    });
+      });
   },
 
   async afterDelete(event) {
-
+    if (event.state?.skipAvg) return;
     const { result } = event;
 
-    console.log("result: ", result);
     const recipeId = result.recipeId;
     const rating = result.rating;
 
@@ -36,6 +29,6 @@ module.exports = {
       .removeRatingFromAverage({
         recipeId,
         rating
-    });
+      });
   }
-}
+};
