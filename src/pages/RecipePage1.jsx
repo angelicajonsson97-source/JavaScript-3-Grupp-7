@@ -18,7 +18,7 @@ export default function RecipePage() {
   //const slug = "classic-escargot-from-france";
 
   //fetch data
-  const { data, loading, error } = useFetch(
+  const { data, loading, error, refetch } = useFetch(
     `/api/recipes?filters[slug][$eq]=${slug}`
     + `&populate[user][populate]=*`
     + `&populate[categories][populate]`
@@ -48,7 +48,7 @@ export default function RecipePage() {
 
   //update user rating
 
-  console.log("Id: ",displayRecipeData.id);
+  console.log("Id: ",displayRecipeData.documentId);
   async function sendRating(ratingValue) {
     try { 
       await fetch("/api/recipe-ratings", {
@@ -59,10 +59,13 @@ export default function RecipePage() {
         body: JSON.stringify({
           data: {
             rating: ratingValue,
-            recipe: displayRecipeData.documentId
+            recipe: displayRecipeData.documentId,
+            recipeId: displayRecipeData.documentId
             }
         })
       })
+
+      await refetch();
     }
     catch (err) {
       console.error(err)

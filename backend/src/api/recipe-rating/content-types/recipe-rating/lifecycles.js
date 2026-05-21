@@ -7,16 +7,19 @@ module.exports = {
     console.log("result: ", result);
     console.log("event: ", event);
 
-    console.log("recipe:", event.params.data.recipe.set[0].id );
+    //console.log("recipe:", event.params.data.recipe.set[0].id );
 
-    const recipeId = event.params.data.recipe.set[0].id;
+    //const recipeId = event.params.data.recipe.set[0].id;
+
+    const recipeId = result.recipeId;
+    const rating = result.rating;
 
     console.log("recipeId: ", recipeId);
     await strapi
     .service('api::recipe.recipe')
     .addRatingToAverage({
         recipeId,
-        rating: result.rating
+        rating
     });
   },
 
@@ -24,14 +27,15 @@ module.exports = {
 
     const { result } = event;
 
-    console.log("recipe:", event.params.data.recipe.set[0].id );
+    console.log("result: ", result);
+    const recipeId = result.recipeId;
+    const rating = result.rating;
 
-    const recipeId = event.params.data.recipe.set[0].id;    
     await strapi
       .service('api::recipe.recipe')
       .removeRatingFromAverage({
         recipeId,
-        rating: result.rating
-      });
+        rating
+    });
   }
 }

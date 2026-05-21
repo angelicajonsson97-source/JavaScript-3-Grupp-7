@@ -31,6 +31,9 @@
       "relation": "oneToOne",
       "target": "api::comment.comment",
       "mappedBy": "recipe_rating"
+    },
+    "recipeId": {
+      "type": "string"
     }
   }
 }
