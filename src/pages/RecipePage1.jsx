@@ -60,7 +60,7 @@ export default function RecipePage() {
           data: {
             rating: ratingValue,
             recipe: displayRecipeData.documentId,
-            recipeId: displayRecipeData.id,
+            recipeId: displayRecipeData.documentId,
             }
         })
       })

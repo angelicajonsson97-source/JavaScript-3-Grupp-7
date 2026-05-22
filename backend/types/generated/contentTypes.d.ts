@@ -638,7 +638,7 @@ export interface ApiRecipeRatingRecipeRating
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer;
     recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
-    recipeId: Schema.Attribute.Integer;
+    recipeId: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

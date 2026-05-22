@@ -33,7 +33,7 @@
       "mappedBy": "recipe_rating"
     },
     "recipeId": {
-      "type": "integer"
+      "type": "string"
     }
   }
 }
