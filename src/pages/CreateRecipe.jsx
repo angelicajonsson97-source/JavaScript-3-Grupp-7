@@ -13,9 +13,9 @@ import {
   emptyIngredient,
   generateSlug,
 } from "../utils/recipeHelper";
-import CreateCategoryInline from "../components/CategoryCard";
-import RecipeSteps from "../partials/CreateRecipeSteps";
-import RecipeIngredients from "../partials/CreateRecipeIngredients";
+import CreateCategory from "../components/CategoryCard";
+import CreateRecipeSteps from "../partials/CreateRecipeSteps";
+import CreateRecipeIngredients from "../partials/CreateRecipeIngredients";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 const CATEGORIES_URL = `${API_BASE_URL}/api/categories?fields[0]=category_name&fields[1]=documentId`;
@@ -307,7 +307,7 @@ const CreateRecipe = () => {
               </div>
             </div>
 
-            <CreateCategoryInline
+            <CreateCategory
               categories={categories}
               selectedId={form.category_id}
               onSelect={(id) => setForm((p) => ({ ...p, category_id: id }))}
@@ -341,14 +341,14 @@ const CreateRecipe = () => {
               </div>
             </div>
 
-            <RecipeSteps
+            <CreateRecipeSteps
               steps={steps}
               onUpdate={updateStep}
               onAdd={addStep}
               onRemove={removeStep}
             />
 
-            <RecipeIngredients
+            <CreateRecipeIngredients
               ingredients={ingredients}
               availableIngredients={availableIngredients}
               onUpdate={updateIngredient}
