@@ -12,7 +12,7 @@ export default function RecipePage() {
 
   const { slug } = useParams();
 
-  const [displayRecipeData, setDisplayRecipeData] = useState(null);
+  //const [displayRecipeData, setDisplayRecipeData] = useState(null);
 
   const [userRating, setUserRating] = useState(0);
   //const slug = "classic-escargot-from-france";
@@ -29,18 +29,19 @@ export default function RecipePage() {
     + `&populate[recipe_ratings][populate]`
     + `&populate[recipe_ingredients][populate]=ingredient`
   );
-  console.log("raw recipe data: ", data);
   
   //select the useful data from the raw data
-  const processedRecipeData = data?.[0]?.data?.[0]
-  console.log("processed data: ", processedRecipeData);
+  const displayRecipeData = data?.[0]?.data?.[0]
+  console.log("processed data: ", displayRecipeData);
 
   //set processed data to state for rendering
+  /*
   useEffect(() => { 
     if (processedRecipeData) { 
       setDisplayRecipeData(processedRecipeData)
     }
   }, [processedRecipeData])
+*/
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p> Error loading recipe</p>
@@ -60,7 +61,6 @@ export default function RecipePage() {
           data: {
             rating: ratingValue,
             recipe: displayRecipeData.documentId,
-            recipeId: displayRecipeData.documentId,
             }
         })
       })
@@ -168,5 +168,4 @@ export default function RecipePage() {
       </ul>
     </>
   )
-
 }

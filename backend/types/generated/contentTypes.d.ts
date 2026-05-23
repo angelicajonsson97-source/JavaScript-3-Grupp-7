@@ -622,7 +622,7 @@ export interface ApiRecipeRatingRecipeRating
     singularName: 'recipe-rating';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     comment: Schema.Attribute.Relation<'oneToOne', 'api::comment.comment'>;
@@ -638,7 +638,6 @@ export interface ApiRecipeRatingRecipeRating
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer;
     recipe: Schema.Attribute.Relation<'manyToOne', 'api::recipe.recipe'>;
-    recipeId: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -722,7 +721,7 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     singularName: 'recipe';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     average_rating: Schema.Attribute.Decimal;

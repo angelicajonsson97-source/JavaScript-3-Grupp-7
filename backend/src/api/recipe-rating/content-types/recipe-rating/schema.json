@@ -7,7 +7,7 @@
     "displayName": "recipe_rating"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -31,9 +31,6 @@
       "relation": "oneToOne",
       "target": "api::comment.comment",
       "mappedBy": "recipe_rating"
-    },
-    "recipeId": {
-      "type": "string"
     }
   }
 }
