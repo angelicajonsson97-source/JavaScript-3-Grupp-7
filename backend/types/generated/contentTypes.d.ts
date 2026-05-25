@@ -622,7 +622,7 @@ export interface ApiRecipeRatingRecipeRating
     singularName: 'recipe-rating';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     comment: Schema.Attribute.Relation<'oneToOne', 'api::comment.comment'>;
@@ -721,7 +721,7 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
     singularName: 'recipe';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     average_rating: Schema.Attribute.Decimal;
