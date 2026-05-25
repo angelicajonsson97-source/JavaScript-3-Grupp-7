@@ -3,6 +3,7 @@
 module.exports = {
 
   async afterCreate(event) {
+    
     console.log("afterCreate event: ", event.params.data.recipe.connect?.[0].id
       || event.params.data.recipe.set?.[0].id);
 
@@ -22,6 +23,17 @@ module.exports = {
       .recalculate(recipeId);
   },
 
+  async afterUpdate(event) {
+
+
+    const recipeId = event.params.data.recipe.set?.[0].id ||
+      event.params.data.recipe.connect?.[0].id;
+    
+    await strapi
+      .service('api::recipe-rating.recipe-rating')
+      .recalculate(recipeId);
+  },
+    
   async beforeDelete(event) {
   
     console.log("event: ", event);
