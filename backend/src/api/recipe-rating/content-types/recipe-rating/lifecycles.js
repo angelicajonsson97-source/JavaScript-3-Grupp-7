@@ -35,6 +35,8 @@ module.exports = {
         where: { id },
         populate: ['recipe'],
       });
+    
+    console.log("before rating: ", rating)
 
     //save the recipe id in state so afterDelete can access it
     event.state = {

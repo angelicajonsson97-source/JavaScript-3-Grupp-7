@@ -1,24 +1,32 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { useAuth } from '../context/AuthContext'
 import useFetch from '../utils/useFetch'
+
+import "../css/RecipePage.css";
 
 
 RecipePage.route = {
-  path: '/recipe/:slug' //add slug
+  path: '/recipe/:slug'
 }
 
 export default function RecipePage() {
 
+  //const slug = "classic-escargot-from-france";
   const { slug } = useParams();
 
-  //const [displayRecipeData, setDisplayRecipeData] = useState(null);
+  const { user, loading: authLoading } = useAuth();
+  console.log("user:", user);
 
-  const [userRating, setUserRating] = useState(0);
+  const [userRating, setUserRating] = useState({
+    rating: 0,
+    documentId: "12"
+  });
   const [userComment, setUserComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [bookmarks, setBookmarks] = useState(0);
-  //const slug = "classic-escargot-from-france";
+
 
   //fetch data
   const { data, loading, error, refetch } = useFetch(
@@ -29,7 +37,7 @@ export default function RecipePage() {
     + `&populate[comments][populate]=*`
     + `&populate[recipe_reactions][populate]`
     + `&populate[recipe_steps][sort][0]=step_number:asc` //sorts by step using strapi
-    + `&populate[recipe_ratings][populate]`
+    + `&populate[recipe_ratings][populate]=user`
     + `&populate[recipe_ingredients][populate]=ingredient`
   );
   
@@ -37,9 +45,43 @@ export default function RecipePage() {
   const displayRecipeData = data?.[0]?.data?.[0]
   console.log("processed data: ", displayRecipeData);
 
+  //deconstruct data
+  const {
+    title,
+    average_rating,
+    categories,
+    cook_time_minutes,
+    difficulty,
+    likes_count,
+    description,
+    recipe_reactions,
+    recipe_ingredients,
+    recipe_steps,
+    recipe_ratings,
+    comments
+  } = displayRecipeData || {};
+
+  useEffect(() => {
+    if (!recipe_ratings || !user) return;
+
+    const existingRating = recipe_ratings.find(
+      (r) => r.user?.id === user.id
+    );
+
+    if (existingRating) {
+      setUserRating({
+        rating: existingRating.rating,
+        documentId: existingRating.documentId,
+      });
+    }
+  }, [recipe_ratings, user]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p> Error loading recipe</p>
   if (!displayRecipeData) return <p>No recipe found</p>
+
+  const userCommentId = comments?.find(
+    (c) => c.user?.id === user?.id)?.documentId || null; 
 
   //post or update user rating
   async function sendRating(ratingValue) {
@@ -53,6 +95,7 @@ export default function RecipePage() {
           data: {
             rating: ratingValue,
             recipe: displayRecipeData.documentId,
+            user: user.documentId,
             }
         })
       })
@@ -76,7 +119,8 @@ export default function RecipePage() {
             comment_text: commentValue,
             recipe: displayRecipeData.documentId,
             likes_count: 0,
-            user: "d93cie86sr2siyx0h38p8pq7" //currently hardcoded
+            user: user.documentId,
+            recipe_rating: userRating.documentId
             }
         })
       })
@@ -87,22 +131,13 @@ export default function RecipePage() {
     }
   }
 
-  //deconstruct data
-  const {
-    title,
-    average_rating,
-    categories,
-    cook_time_minutes,
-    difficulty,
-    likes_count,
-    description,
-    recipe_reactions,
-    recipe_ingredients,
-    recipe_steps,
-    comments
-  } = displayRecipeData;
 
-
+  // check if user has rating, only show comment if rated
+  const hasRated = recipe_ratings?.some(
+    (rating) => rating.user?.id === user?.id
+  );
+  console.log("has rating:", hasRated);
+  
   const bookmarkCalc = recipe_reactions?.filter(
     (item) => item.reaction_type === "book-mark"
   ).length || 0
@@ -131,35 +166,46 @@ export default function RecipePage() {
 
       {/* renders user comment and rating */}
       
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        sendRating(userRating);
-      }}>
-        <label>
-          <input
-            type="text"
-            value={userRating}
-            min="0"
-            max="5"
-            onChange={(e) => setUserRating(Number(e.target.value))} />
-        </label>
-        <button type="submit">Submit Rating</button>
-      </form>
+      {user ?(
+        <>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            sendRating(userRating.rating);
+          }}>
+            <label>
+              <input
+                type="text"
+                value={userRating.rating}
+                min="0"
+                max="5"
+                onChange={(e) => setUserRating({
+                  ...userRating,
+                  rating: Number(e.target.value)
+                })}
+              />
+            </label>
+            <button type="submit">Submit Rating</button>
+          </form>
 
-      <form onSubmit={(e) => { 
-        e.preventDefault();
-        sendComment(userComment);
-      }}>
-        <label>
-          <input
-            type="text"
-            value={userComment}
-            onChange={(e) => setUserComment(e.target.value)}
-            placeholder="Add a comment"
-          />
-        </label>
-        <button type="submit">Submit Comment</button>
-      </form>
+          {hasRated ? (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              sendComment(userComment);
+            }}>
+              <label>
+                <input
+                  type="text"
+                  value={userComment}
+                  onChange={(e) => setUserComment(e.target.value)}
+                  placeholder="Add a comment"
+                />
+              </label>
+              <button type="submit">Submit Comment</button>
+            </form>
+          ) : (<p>You must rate the recipe before commenting.</p>)
+          }
+        </> ) : ( <p>Log in or create an account to comment and rate the recipe.</p>)
+      }
 
       {/* renders ingredients */}
       <h2>Ingredients</h2>
@@ -189,7 +235,7 @@ export default function RecipePage() {
         {comments?.map((c) => (
           <li
           key={c?.documentId}>
-            {"Rating: " + (c?.recipe_rating?.rating ?? "No rating")} {<br/>}
+            {"Rating: " + (c?.recipe_rating?.rating ?? 0)} {<br/>}
             {c?.user.username} {<br />}
             {c?.comment_text} {<br />}
             Likes: {c?.likes_count}
