@@ -87,14 +87,14 @@ export default function StartPage() {
           Explore our collection of delicious recipes from around the world.
         </p>
 
+        <TopCategories />
+        
         <Searchbar
           value={query}
           onChange={setQuery}
           placeholder="Search for recipes, ingredients, or categories..."
           className="searchbar"
         />
-
-        <TopCategories />
 
         {loading && <p>Loading...</p>}
         {noResults && (
@@ -108,7 +108,7 @@ export default function StartPage() {
           <div className="recipe-list">
             {recipes.map((recipe) => (
               <Link
-                to={`/recipes/${recipe.slug}`}
+                to={`/recipe/${recipe.slug}`}
                 key={recipe.id}
                 className="recipe-card"
               >
@@ -130,7 +130,7 @@ export default function StartPage() {
         <div className="featured-list">
           {featured.map((recipe) => (
             <Link
-              to={`/recipes/${recipe.slug}`}
+              to={`/recipe/${recipe.slug}`}
               key={recipe.id}
               className="featured-card"
             >
@@ -174,7 +174,7 @@ export default function StartPage() {
         <div className="most-liked-list">
           {mostLiked.slice(0, 3).map((recipe) => (
             <Link
-              to={`/recipes/${recipe.slug}`}
+              to={`/recipe/${recipe.slug}`}
               key={recipe.id}
               className="most-liked-card"
             >
