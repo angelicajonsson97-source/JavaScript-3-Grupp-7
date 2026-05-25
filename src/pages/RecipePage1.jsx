@@ -15,6 +15,9 @@ export default function RecipePage() {
   //const [displayRecipeData, setDisplayRecipeData] = useState(null);
 
   const [userRating, setUserRating] = useState(0);
+  const [userComment, setUserComment] = useState("");
+  const [likes, setLikes] = useState(0);
+  const [bookmarks, setBookmarks] = useState(0);
   //const slug = "classic-escargot-from-france";
 
   //fetch data
@@ -34,22 +37,11 @@ export default function RecipePage() {
   const displayRecipeData = data?.[0]?.data?.[0]
   console.log("processed data: ", displayRecipeData);
 
-  //set processed data to state for rendering
-  /*
-  useEffect(() => { 
-    if (processedRecipeData) { 
-      setDisplayRecipeData(processedRecipeData)
-    }
-  }, [processedRecipeData])
-*/
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p> Error loading recipe</p>
   if (!displayRecipeData) return <p>No recipe found</p>
 
-  //update user rating
-
-  console.log("Id: ",displayRecipeData.documentId);
+  //post or update user rating
   async function sendRating(ratingValue) {
     try { 
       await fetch("/api/recipe-ratings", {
@@ -64,7 +56,6 @@ export default function RecipePage() {
             }
         })
       })
-
       await refetch();
     }
     catch (err) {
@@ -72,8 +63,31 @@ export default function RecipePage() {
     }
   }
 
+  //post or update user comment
+  async function sendComment(commentValue) {
+    try { 
+      await fetch("/api/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          data: {
+            comment_text: commentValue,
+            recipe: displayRecipeData.documentId,
+            likes_count: 0,
+            user: "d93cie86sr2siyx0h38p8pq7" //currently hardcoded
+            }
+        })
+      })
+      await refetch();
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
 
-  //deconstruct data from use state
+  //deconstruct data
   const {
     title,
     average_rating,
@@ -89,15 +103,11 @@ export default function RecipePage() {
   } = displayRecipeData;
 
 
-  //counts the number of bookmarks in recipe_reactions
-  const bookmarkCount = recipe_reactions?.filter(
+  const bookmarkCalc = recipe_reactions?.filter(
     (item) => item.reaction_type === "book-mark"
-  ).length || 0;
+  ).length || 0
+  //setBookmarks(bookmarkCalc);
 
-  //sorts the recipe steps by number
-  //const instructions = recipe_steps?.sort(
-  // (a, b) => a.step_number - b.step_number) || [];
-  
   const instructions = recipe_steps || [];
   
   return (
@@ -108,8 +118,14 @@ export default function RecipePage() {
       <p>Cooktime: {cook_time_minutes}</p>
       <p>Categories: {categories?.map((c) => c.category_name).join(', ')}</p>
       <p>Difficulty: {difficulty}</p>
-      <p>Likes: {likes_count}</p>
-      <p>Bookmarks: {bookmarkCount}</p>
+
+      <p>Likes: {likes}
+        <button onClick={(e) => setLikes(likes + 1)}>Like</button> { }
+      </p>
+
+      <p>Bookmarks: {bookmarks}
+        <button onClick={(e) => setBookmarks(bookmarks + 1)}>Bookmark</button> { }
+      </p>
 
       <p>{description}</p>
 
@@ -128,6 +144,21 @@ export default function RecipePage() {
             onChange={(e) => setUserRating(Number(e.target.value))} />
         </label>
         <button type="submit">Submit Rating</button>
+      </form>
+
+      <form onSubmit={(e) => { 
+        e.preventDefault();
+        sendComment(userComment);
+      }}>
+        <label>
+          <input
+            type="text"
+            value={userComment}
+            onChange={(e) => setUserComment(e.target.value)}
+            placeholder="Add a comment"
+          />
+        </label>
+        <button type="submit">Submit Comment</button>
       </form>
 
       {/* renders ingredients */}
@@ -158,7 +189,7 @@ export default function RecipePage() {
         {comments?.map((c) => (
           <li
           key={c?.documentId}>
-            {"Rating: " + c?.recipe_rating.rating} {<br/>}
+            {"Rating: " + (c?.recipe_rating?.rating ?? "No rating")} {<br/>}
             {c?.user.username} {<br />}
             {c?.comment_text} {<br />}
             Likes: {c?.likes_count}
