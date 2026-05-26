@@ -28,6 +28,7 @@ export const fetchIngredients = async () => {
 
 /* ── Create ── */
 
+// Creates a category with the given name and generating a random slug
 export const createCategory = async (name) => {
   const slug = name
     .toLowerCase()
@@ -40,6 +41,7 @@ export const createIngredient = async (name) => {
   return post("ingredients", { ingredient_name: name });
 };
 
+// Creates a recipe-ingredient relation and connecting an ingredient to a recipe with quantity and unit
 export const createRecipeIngredient = async ({
   ingredientId,
   quantity,
@@ -48,10 +50,11 @@ export const createRecipeIngredient = async ({
   return post("recipe-ingredients", {
     quantity: quantity ? Number(quantity) : null,
     unit,
-    ingredient: Number(ingredientId),
+    ingredient: { connect: [{ documentId: ingredientId }] },
   });
 };
 
+// Uploads an image file and returns the Strapi media library ID
 export const uploadImage = async (file) => {
   const form = new FormData();
   form.append("files", file);
@@ -65,6 +68,7 @@ export const uploadImage = async (file) => {
   return json[0].id;
 };
 
+// Creates a recipe step and uploading an image if there is one and returns the created step
 export const createRecipeStep = async (step) => {
   const data = {
     step_number: step.step_number ? Number(step.step_number) : null,
@@ -76,6 +80,7 @@ export const createRecipeStep = async (step) => {
   return post("recipe-steps", data);
 };
 
+// Creates a recipe with the given payload and optional image file and generating a random slug
 export const createRecipe = async (payload, imageFile) => {
   if (imageFile) {
     payload.image_url = await uploadImage(imageFile);
