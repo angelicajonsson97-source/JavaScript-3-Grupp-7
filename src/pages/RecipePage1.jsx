@@ -4,6 +4,12 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import useFetch from '../utils/useFetch'
 
+//hooks
+import useRecipe from '../utils/useRecipe'
+import useComments from '../utils/useComments'
+import useRatings from '../utils/useRatings'
+import useAverageRating from '../utils/useAverageRating'
+
 import "../css/RecipePage.css";
 
 
@@ -26,6 +32,49 @@ export default function RecipePage() {
   const [flagDeleteComment, setFlagDeleteComment] = useState(false);
 
 
+  //data for recipe
+  const {
+    data: recipe,
+    errorRE,
+    loadingRE } = useRecipe(slug);
+
+  console.log("data:", recipe)
+  
+  const recipeId = recipe?.id;
+
+  //data for averageRating
+  const {
+    averageRating,
+    loadingAV,
+    errorAV,
+    refetchAverageRating,
+    setAverageRating
+  } = useAverageRating(recipeId);
+
+  console.log("average rating: ", averageRating);
+
+  //data for comment section
+  const {
+    comments,
+    loadingCO,
+    errorCO,
+    refetchComments,
+    setComments
+  } = useComments(recipeId);
+
+  console.log("comments: ", comments);
+
+  //data for comment section rating
+  const {
+    ratings,
+    loadingRA,
+    errorRA,
+    refetchRatings,
+    setRatings
+  } = useRatings(recipeId);
+
+  console.log("ratings: ", ratings);
+
   const [userRating, setUserRating] = useState({
     rating: 0,
     documentId: null
@@ -36,31 +85,14 @@ export default function RecipePage() {
     documentId: null
   });
 
+  //currently useless
   const [likes, setLikes] = useState(0);
   const [bookmarks, setBookmarks] = useState(0);
 
 
-  //fetch data
-  const { data, loading, error, refetch } = useFetch(
-    `/api/recipes?filters[slug][$eq]=${slug}`
-    + `&populate[user][populate]=*`
-    + `&populate[categories][populate]`
-    + `&populate[comments][sort][0]=likes_count:desc` //sorts by likes using strapi
-    + `&populate[comments][populate]=*`
-    + `&populate[recipe_reactions][populate]`
-    + `&populate[recipe_steps][sort][0]=step_number:asc` //sorts by step using strapi
-    + `&populate[recipe_ratings][populate]=user`
-    + `&populate[recipe_ingredients][populate]=ingredient`
-  );
-  
-  //select the useful data from the raw data
-  const displayRecipeData = data?.[0]?.data?.[0]
-  console.log("processed data: ", displayRecipeData);
-
-  //deconstruct data
+  //deconstruct static recipe data
   const {
     title,
-    average_rating,
     categories,
     cook_time_minutes,
     difficulty,
@@ -69,27 +101,29 @@ export default function RecipePage() {
     recipe_reactions,
     recipe_ingredients,
     recipe_steps,
-    recipe_ratings,
-    comments
-  } = displayRecipeData || {};
+  } = recipe || {};
 
+  //find if auth user has a rating already. 
   useEffect(() => {
-    if (!recipe_ratings || !user) return;
+    if (!ratings || !user) return;
 
-    const existingRating = recipe_ratings.find(
+    const existingRating = ratings.find(
       (r) => r.user?.id === user.id
     );
 
     if (existingRating) {
+
       setFlagDeleteRating(true);
       setFlagShowComment(true);
+
       setUserRating({
         rating: existingRating.rating,
         documentId: existingRating.documentId,
       });
     }
-  }, [recipe_ratings, user]);
+  }, [ratings, user]);
 
+  //find if auth user has a comment already
   useEffect(() => {
     if (!comments || !user) return;
 
@@ -98,24 +132,27 @@ export default function RecipePage() {
     );
 
     if (existingComment) {
+
       setFlagDeleteComment(true);
+
       setUserComment({
         text: existingComment.comment_text,
         documentId: existingComment.documentId,
       });
     }
-  }, [comments, user]);
+  }, [comments,user]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p> Error loading recipe</p>
-  if (!displayRecipeData) return <p>No recipe found</p>
+  //if (loadingRE || loadingAV || loadingCO || loadingRA) return <p>Loading all data...</p>;
+  if (errorRE || errorAV || errorCO || errorRA ) return <p> Error loading recipe</p>
+  if (!recipe) return <p>No recipe found</p>
 
   //post or update user rating
   async function sendRating() {
     try { 
       console.log("userRating id:", userRating.documentId)
-      if (userRating.id) {
-        const res = await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
+
+      if (userRating.documentId) {
+        await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -127,10 +164,9 @@ export default function RecipePage() {
             }
           })
         });
-        console.log("PUT res: ", res)
       }
       else { 
-        const res = await fetch("/api/recipe-ratings", {
+        await fetch("/api/recipe-ratings", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -139,18 +175,21 @@ export default function RecipePage() {
           body: JSON.stringify({
             data: {
               rating: userRating.rating,
-              recipe: displayRecipeData.id,
+              recipe: recipe.id,
               user : user.id,
             }
           })
         });
-        const data = await res.json();
-        console.log("error: ", data);
+
       }
 
       setFlagDeleteRating(true);
       setFlagShowComment(true);
-      await refetch();
+      await refetchAverageRating();
+      await refetchRatings();
+      
+      userRating.r
+
     }
     catch (err) {
       console.error(err)
@@ -169,8 +208,11 @@ export default function RecipePage() {
 
       setFlagDeleteRating(false);
       setFlagShowComment(false);
-      setUserRating({rating: 0});
-      await refetch();
+      await refetchAverageRating();
+      await refetchRatings();
+      //setUserRating({ rating: 0 });
+      
+      //setRatings(prev => prev.filter(r => r.documentId !== userRating.documentId));
     }
     catch (err) {
       console.error(err)
@@ -180,6 +222,7 @@ export default function RecipePage() {
   //post or update a user comment
   async function sendComment() {
     try { 
+
       if (userComment.documentId) {
         await fetch(`/api/comments/${userComment.documentId}`, {
           method: "PUT",
@@ -193,6 +236,7 @@ export default function RecipePage() {
             }
           })
         });
+
       }
       else {
         await fetch("/api/comments", {
@@ -204,17 +248,19 @@ export default function RecipePage() {
           body: JSON.stringify({
             data: {
               comment_text: userComment.text,
-              recipe: displayRecipeData.id,
+              recipe: recipe.id,
               likes_count: 0,
               user: user.id,
               recipe_rating: userRating.documentId
             }
           })
         });
+
       }
 
+      await refetchComments();
+
       setFlagDeleteComment(true);
-      await refetch();
     }
     catch (err) {
       console.error(err)
@@ -232,8 +278,12 @@ export default function RecipePage() {
       })
 
       setFlagDeleteComment(false);
-      setUserComment({text: ""});
-      await refetch();
+
+      await refetchComments();
+      
+      //setUserComment({text: ""});
+      
+      //setComments(prev => prev.filter(c => c.docmentId !== userComment.docmentId));
     }
     catch (err) {
       console.error(err)
@@ -246,12 +296,12 @@ export default function RecipePage() {
   //setBookmarks(bookmarkCalc);
 
   const instructions = recipe_steps || [];
-  
+
   return (
     <>
       <h1>{title}</h1>
 
-      <p>Rating: {average_rating}</p>
+      <p>Rating: {averageRating.average_rating}</p>
       <p>Cooktime: {cook_time_minutes}</p>
       <p>Categories: {categories?.map((c) => c.category_name).join(', ')}</p>
       <p>Difficulty: {difficulty}</p>
@@ -360,5 +410,5 @@ export default function RecipePage() {
         ))}
       </ul>
     </>
-  )
+  );
 }
