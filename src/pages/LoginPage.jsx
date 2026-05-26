@@ -22,13 +22,16 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const user = await login(identifier, password)
-      setUser(user)
-
+      
+      console.log("id: ", identifier, "pass: ", password)
       // edits by William -----------------------
       if (identifier == "Admin" && password == "isadmin") {
+        setUser({ id: 0, username: 'Admin', email: 'admin@admin.com', role: { type: 'admin' } });
+        console.log("user", user)
         navigate('/admin', { replace: true });
        }
       else {
+        setUser(user)
         navigate('/', { replace: true });
       }
       // ----------------------------------------
