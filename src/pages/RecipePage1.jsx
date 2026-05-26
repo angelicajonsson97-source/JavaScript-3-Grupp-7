@@ -142,17 +142,20 @@ export default function RecipePage() {
     }
   }, [comments,user]);
 
-  //if (loadingRE || loadingAV || loadingCO || loadingRA) return <p>Loading all data...</p>;
+  if (loadingRE) return <p>Loading recipe...</p>
   if (errorRE || errorAV || errorCO || errorRA ) return <p> Error loading recipe</p>
   if (!recipe) return <p>No recipe found</p>
 
   //post or update user rating
   async function sendRating() {
     try { 
+
+      let res;
+
       console.log("userRating id:", userRating.documentId)
 
       if (userRating.documentId) {
-        await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
+        res = await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -166,7 +169,7 @@ export default function RecipePage() {
         });
       }
       else { 
-        await fetch("/api/recipe-ratings", {
+        res = await fetch("/api/recipe-ratings", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -180,15 +183,20 @@ export default function RecipePage() {
             }
           })
         });
-
       }
+      const json = await res.json();
+
+      setUserRating({
+        rating: json?.data.rating ?? userRating.rating,
+        documentId: json?.data?.documentId ?? userRating.documentId
+      })
 
       setFlagDeleteRating(true);
       setFlagShowComment(true);
+
       await refetchAverageRating();
       await refetchRatings();
-      
-      userRating.r
+      await refetchComments();
 
     }
     catch (err) {
@@ -210,7 +218,10 @@ export default function RecipePage() {
       setFlagShowComment(false);
       await refetchAverageRating();
       await refetchRatings();
-      //setUserRating({ rating: 0 });
+      setUserRating({
+        rating: 0,
+        documentId: null
+       });
       
       //setRatings(prev => prev.filter(r => r.documentId !== userRating.documentId));
     }
@@ -258,6 +269,15 @@ export default function RecipePage() {
 
       }
 
+      setComments(prev => [
+        ...prev,
+        {
+          comment_text: userComment.text,
+          user,
+          recipe_rating: { rating: userRating.rating },
+          documentId: crypto.randomUUID() // temp key
+        }
+      ]);
       await refetchComments();
 
       setFlagDeleteComment(true);
@@ -281,7 +301,10 @@ export default function RecipePage() {
 
       await refetchComments();
       
-      //setUserComment({text: ""});
+      setUserComment({
+        text: "",
+        documentId: null
+      });
       
       //setComments(prev => prev.filter(c => c.docmentId !== userComment.docmentId));
     }
@@ -301,7 +324,12 @@ export default function RecipePage() {
     <>
       <h1>{title}</h1>
 
-      <p>Rating: {averageRating.average_rating}</p>
+      <p>Rating: {
+        loadingAV ?
+          "..."
+          :
+          averageRating?.average_rating}
+      </p>
       <p>Cooktime: {cook_time_minutes}</p>
       <p>Categories: {categories?.map((c) => c.category_name).join(', ')}</p>
       <p>Difficulty: {difficulty}</p>
@@ -340,8 +368,10 @@ export default function RecipePage() {
             <button type="submit">Submit Rating</button>
             {flagDeleteRating ? (
                 <button
-                  onClick={deleteRating}
-                  type="button"> Delete Rating </button>
+                onClick={deleteRating}
+                type="button"
+                disabled={!!userComment.documentId}
+              > Delete Rating </button>
               ) : (<p> Rate the recipe...</p>)}
           </form>
 
@@ -397,18 +427,22 @@ export default function RecipePage() {
 
       {/* renders comments */}
       <h2>Comments</h2>
-      <ul>
-        {comments?.map((c) => (
-          <li
-            key={c?.documentId}>
-            {"Rating: " + (c?.recipe_rating?.rating ?? 0)} {<br/>}
-            {c?.user.username} {<br />}
-            {c?.comment_text} {<br />}
-            Likes: {c?.likes_count}
-            {<br />}
-          </li>
-        ))}
-      </ul>
+      {loadingCO && loadingRA ? (
+        <p>Loding comments...</p>
+      ) : (
+        <ul>
+          {comments?.map((c) => (
+            <li
+              key={c?.documentId}>
+              {"Rating: " + (c?.recipe_rating?.rating ?? 0)} {<br />}
+              {c?.user.username} {<br />}
+              {c?.comment_text} {<br />}
+              Likes: {c?.likes_count}
+              {<br />}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }
