@@ -302,7 +302,7 @@ export default function RecipePage() {
             }}>
               <label>
                 <input
-                  type="text"
+                  required type="text"
                   value={userComment.text}
                   onChange={(e) => setUserComment({
                     ...userComment,
