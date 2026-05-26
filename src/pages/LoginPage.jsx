@@ -23,7 +23,16 @@ export default function LoginPage() {
     try {
       const user = await login(identifier, password)
       setUser(user)
-      navigate('/admin', { replace: true })
+
+      // edits by William -----------------------
+      if (identifier == "Admin" && password == "isadmin") {
+        navigate('/admin', { replace: true });
+       }
+      else {
+        navigate('/', { replace: true });
+      }
+      // ----------------------------------------
+
     } catch (err) {
       setError(err.message || 'Inloggning misslyckades')
     } finally {
