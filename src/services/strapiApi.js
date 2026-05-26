@@ -63,7 +63,7 @@ export async function getRecipes(search = '') {
   // populate=author,category hämtar relationsdata i samma anrop (undviker extra rundresor)
   const query = search
     ? `?filters[title][$containsi]=${encodeURIComponent(search)}&populate=author,category`
-    : '?populate=author,category'
+    : '?populate=*' //edits by William to have recipe be shown. origin code : "author,category" instead of "*" 
   return request(`/recipes${query}`)
 }
 
@@ -85,7 +85,7 @@ export async function deleteRecipe(id) {
 
 // Comments
 export async function getComments(search = '', recipeId = null) {
-  let q = '?populate=author,recipe'
+  let q = '?populate=*' //edits by William to have recipe be shown. origin code : "author,recipe" instead of "*" 
   // $eq filtrerar exakt recept-ID — används på receptsidan för att bara visa dess kommentarer
   if (recipeId) q += `&filters[recipe][id][$eq]=${recipeId}`
   if (search) q += `&filters[content][$containsi]=${encodeURIComponent(search)}`
