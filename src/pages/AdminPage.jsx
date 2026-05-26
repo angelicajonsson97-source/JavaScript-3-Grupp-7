@@ -38,9 +38,10 @@ export default function AdminPage() {
         // Strapi v4 returnerar { data: [] }, v5 returnerar en vanlig array — hanterar båda
         setData(Array.isArray(res) ? res : (res.data ?? []))
       })
-      .catch(err => {
+      .catch(_err => {
+        // _err ignoreras — vi visar alltid ett fast felmeddelande oavsett typ av fel
         if (!active) return
-        setError(err.message)
+        setError('Kunde inte ansluta till servern. Kontrollera att Strapi körs.')
         setData([])
       })
       .finally(() => { if (active) setLoading(false) })
