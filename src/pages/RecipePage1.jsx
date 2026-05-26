@@ -112,8 +112,9 @@ export default function RecipePage() {
   //post or update user rating
   async function sendRating() {
     try { 
-      if (userRating.documentId) {
-        await fetch("/api/recipe-ratings", {
+      console.log("userRating id:", userRating.documentId)
+      if (userRating.id) {
+        const res = await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -125,6 +126,7 @@ export default function RecipePage() {
             }
           })
         });
+        console.log("PUT res: ", res)
       }
       else { 
         const res = await fetch("/api/recipe-ratings", {
@@ -157,7 +159,7 @@ export default function RecipePage() {
   //delete user rating
   async function deleteRating() {
     try { 
-      await fetch(`/api/recipe-ratings/${userRating.id}`, {
+      await fetch(`/api/recipe-ratings/${userRating.documentId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -177,8 +179,8 @@ export default function RecipePage() {
   //post or update a user comment
   async function sendComment() {
     try { 
-      if (userComment.id) {
-        await fetch("/api/comments", {
+      if (userComment.documentId) {
+        await fetch(`/api/comments/${userComment.documentId}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,

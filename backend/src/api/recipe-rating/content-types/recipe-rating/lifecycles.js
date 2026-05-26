@@ -25,10 +25,19 @@ module.exports = {
 
   async afterUpdate(event) {
 
+    console.log("update event:", event);
 
-    const recipeId = event.params.data.recipe.set?.[0].id ||
-      event.params.data.recipe.connect?.[0].id;
+    const id = event.params.where.id
+    const rating = await strapi.db
+      .query('api::recipe-rating.recipe-rating')
+      .findOne({
+        where: { id },
+        populate: ['recipe'],
+      });
     
+    console.log("update rating: ", rating)
+    
+    const recipeId = rating.recipe.id;
     await strapi
       .service('api::recipe-rating.recipe-rating')
       .recalculate(recipeId);
