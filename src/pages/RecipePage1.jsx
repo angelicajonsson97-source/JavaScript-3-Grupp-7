@@ -16,7 +16,8 @@ export default function RecipePage() {
   //const slug = "classic-escargot-from-france";
   const { slug } = useParams();
 
-  const { user, loading: authLoading } = useAuth();
+  const auth = useAuth() || {};
+  const { user, loading: authLoading } = auth;
   console.log("user:", user);
 
   //flags
