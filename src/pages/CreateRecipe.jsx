@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/CreateRecipe.module.css";
 import useFetch from "../utils/useFetch";
@@ -13,9 +13,10 @@ import {
   emptyIngredient,
   generateSlug,
 } from "../utils/recipeHelper";
-import CreateCategory from "../components/CategoryCard";
-import CreateRecipeSteps from "../partials/CreateRecipeSteps";
-import CreateRecipeIngredients from "../partials/CreateRecipeIngredients";
+import CreateCategoryInline from "../components/CategoryCard";
+import RecipeSteps from "../partials/CreateRecipeSteps";
+import RecipeIngredients from "../partials/CreateRecipeIngredients";
+import { useAuth } from "../context/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 const CATEGORIES_URL = `${API_BASE_URL}/api/categories?fields[0]=category_name&fields[1]=documentId`;
@@ -23,6 +24,14 @@ const INGREDIENTS_URL = `${API_BASE_URL}/api/ingredients?fields[0]=ingredient_na
 
 const CreateRecipe = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
+  if (!user) return null;
 
   const { data: fetchedData, loading: optionsLoading } = useFetch(
     CATEGORIES_URL,
@@ -84,6 +93,7 @@ const CreateRecipe = () => {
       prev.map((ing, i) => (i === index ? { ...ing, [field]: value } : ing)),
     );
 
+  // Sets mode for create or existsing ingredient and resets inputs for the ingredient row
   const setIngredientMode = (index, mode) =>
     setIngredients((prev) =>
       prev.map((ing, i) =>
@@ -100,6 +110,7 @@ const CreateRecipe = () => {
       ),
     );
 
+  // Create new ingredient and updates the ingredient drop down with the new ingredient
   const confirmNewIngredient = async (index) => {
     const name = ingredients[index].newName.trim();
     if (!name) return;
@@ -125,11 +136,13 @@ const CreateRecipe = () => {
 
   const addIngredient = () =>
     setIngredients((prev) => [...prev, emptyIngredient()]);
+
   const removeIngredient = (index) =>
     setIngredients((prev) => prev.filter((_, i) => i !== index));
 
   /* ── Submit ── */
 
+  // Handles the form submit and creates the recipe with all relations and the media file if there is one
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
