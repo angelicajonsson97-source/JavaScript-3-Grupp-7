@@ -57,13 +57,22 @@ export default function Nav() {
             Logga ut
           </button>
         ) : (
-          <Link
-            to="/login"
-            className="btn btn-primary"
-            onClick={() => setMenuOpen(false)}
-          >
-            Logga in
-          </Link>
+          <>
+            <Link
+              to="/login"
+              className="btn btn-primary"
+              onClick={() => setMenuOpen(false)}
+            >
+              Logga in
+            </Link>
+            <Link
+              to="/register"
+              className="btn btn-primary"
+              onClick={() => setMenuOpen(false)}
+            >
+              Register
+            </Link>
+          </>
         )}
       </div>
     </nav>
