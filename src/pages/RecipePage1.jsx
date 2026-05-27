@@ -275,7 +275,6 @@ export default function RecipePage() {
           comment_text: userComment.text,
           user,
           recipe_rating: { rating: userRating.rating },
-          documentId: crypto.randomUUID() // temp key
         }
       ]);
       await refetchComments();
