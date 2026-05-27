@@ -19,6 +19,12 @@ export default function StartPage() {
   const [featured, setFeatured] = useState([]);
   const [mostLiked, setMostLiked] = useState([]);
 
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const pageSize = 4; // Number of recipes to fetch per page
+  const [totalPages, setTotalPages] = useState(1);
+
+
   // Debounce the search query to avoid excessive API calls
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -39,20 +45,27 @@ export default function StartPage() {
 
       const q = encodeURIComponent(debouncedQuery);
       const res = await fetch(
-        `/api/recipes?filters[$or][0][title][$containsi]=${q}` +
-          `&filters[$or][1][description][$containsi]=${q}` +
-          `&filters[$or][2][categories][category_name][$containsi]=${q}` +
-          `&filters[$or][3][recipe_ingredients][ingredient][ingredient_name][$containsi]=${q}` +
-          `&populate=*`,
+        `/api/recipes?pagination[page]=${page}&pagination[pageSize]=${pageSize}` +
+        `&filters[$or][0][title][$containsi]=${q}` +
+        `&filters[$or][1][description][$containsi]=${q}` +
+        `&filters[$or][2][categories][category_name][$containsi]=${q}` +
+        `&filters[$or][3][recipe_ingredients][ingredient][ingredient_name][$containsi]=${q}` +
+        `&populate=*`
       );
+
       const data = await res.json();
       const items = data.data || [];
       setRecipes(items);
       setNoResults(items.length === 0 && debouncedQuery.length > 0);
+
+      if (data.meta?.pagination) {
+        setTotalPages(data.meta.pagination.pageCount);
+      }
+
       setLoading(false);
     }
     fetchRecipes();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, page]);
 
   // API_call to fetch featured recipes
   useEffect(() => {
@@ -121,7 +134,46 @@ export default function StartPage() {
             ))}
           </div>
         )}
+        {/* Pagination */}
+        {debouncedQuery &&  (
+          <div className="pagination">
+
+            {/* Left arrow */}
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="page-arrow"
+            >
+              ←
+            </button>
+
+            {/* Page numbers */}
+            {[...Array(totalPages)].map((_, i) => {
+              const pageNumber = i + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`page-number ${page === pageNumber ? "active" : ""}`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            {/* Right arrow */}
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+              className="page-arrow"
+            >
+              →
+            </button>
+
+          </div>
+        )}
       </section>
+      
 
       {/* Featured – recept */}
       <section className="featured-section">
