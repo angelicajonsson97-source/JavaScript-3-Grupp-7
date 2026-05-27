@@ -1,9 +1,14 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("jwt");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 const post = async (path, body, isFormData = false) => {
   const res = await fetch(`${API_BASE_URL}/api/${path}`, {
     method: "POST",
-    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: isFormData ? body : JSON.stringify({ data: body }),
   });
   const json = await res.json();
@@ -60,6 +65,7 @@ export const uploadImage = async (file) => {
   form.append("files", file);
   const res = await fetch(`${API_BASE_URL}/api/upload`, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: form,
   });
   const json = await res.json();
