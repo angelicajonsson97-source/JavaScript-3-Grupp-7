@@ -3,18 +3,18 @@
   --sec-bac: #D1CA98;
   --first-bac: #EDBF85;
   --text: #7B3E19;
-  --rubriker: #482728;
+  --text2: #482728;
 }
 
 body {
   background-color: var(--first-bac);
 }
 h1, h2, h3 {
-  color: var(--rubriker);
+  color: var(--text2);
   text-align: center;
 }
 p {
-  color: var(--text);
+  color: var(--text2 );
   font-size: 1rem;
   line-height: 1.5;
   justify-content: center;
@@ -58,7 +58,7 @@ ul:nth-of-type(1) {
 ul:nth-of-type(1) li {
   text-align: left;
   margin: 8px 0;
-  color: var(--text);
+  color: var(--text2 );
 }
 
 /* Style for the instructions field */
@@ -69,13 +69,14 @@ ul:nth-of-type(2) {
   width: 90%;
   margin: 20px auto;
   list-style-type: none;
-  /* du ville ta bort prickarna här */
+  
 }
 
 ul:nth-of-type(2) li {
   margin: 10px 0;
   text-align: left;
   line-height: 1.5;
+  color: var(--text2 );
 }
 
 /* Style for the comments field */
@@ -92,5 +93,5 @@ ul:nth-of-type(3) li {
   border-radius: 8px;
   margin: 10px 0;
   text-align: center;
-  color: var(--text);
+  color: var(--text2 );
 }
