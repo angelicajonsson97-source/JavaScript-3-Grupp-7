@@ -13,9 +13,9 @@ import {
   emptyIngredient,
   generateSlug,
 } from "../utils/recipeHelper";
-import CreateCategoryInline from "../components/CategoryCard";
-import RecipeSteps from "../partials/CreateRecipeSteps";
-import RecipeIngredients from "../partials/CreateRecipeIngredients";
+import CreateCategory from "../components/CategoryCard";
+import CreateRecipeSteps from "../partials/CreateRecipeSteps";
+import CreateRecipeIngredients from "../partials/CreateRecipeIngredients";
 import { useAuth } from "../context/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
