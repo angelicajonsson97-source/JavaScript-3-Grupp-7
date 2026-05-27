@@ -273,6 +273,11 @@ textarea:focus {
   background: var(--bg);
 }
 
+.login-card form {
+  display: flex;
+  flex-direction: column;
+}
+
 .login-card h1 {
   font-size: 1.25rem;
   margin: 0 0 6px;
