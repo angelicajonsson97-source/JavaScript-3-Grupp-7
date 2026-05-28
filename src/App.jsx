@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import Nav from './components/Nav'
 import './css/index.css'
 import './css/app-layout.css'
+import Footer from './partials/Footer.jsx'
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <main className="main-content">
         <Outlet />
       </main>
+        <Footer />
     </AuthProvider>
   )
 }
