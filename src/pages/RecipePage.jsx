@@ -195,7 +195,7 @@ export default function RecipePage() {
       setFlagShowComment(true);
 
       await refetchAverageRating();
-      await refetchRatings();
+      //await refetchRatings();
       await refetchComments();
 
     }
@@ -275,7 +275,6 @@ export default function RecipePage() {
           comment_text: userComment.text,
           user,
           recipe_rating: { rating: userRating.rating },
-          documentId: crypto.randomUUID() // temp key
         }
       ]);
       await refetchComments();
@@ -344,6 +343,28 @@ export default function RecipePage() {
 
       <p>{description}</p>
 
+      {/* renders ingredients */}
+      <h2>Ingredients</h2>
+      <ul>
+        {recipe_ingredients?.map((i) => (
+          <li
+          key={i.documentId}>
+          {i?.ingredient?.ingredient_name} {i?.quantity} {i?.unit}
+          </li>
+        ))}
+      </ul>
+
+      {/* renders steps */}
+      <h2>Instructions</h2>
+      <ul>
+        {instructions.map((i) => (
+          <li
+          key={i.documentId}>
+            {i.step_number}. {i.instruction}
+          </li>
+        ))}
+      </ul>
+
       {/* renders user comment and rating */}
       
       {user ?(
@@ -402,28 +423,6 @@ export default function RecipePage() {
           }
         </>) : (<p>Log in or create an account to comment and rate the recipe.</p>)
       }
-
-      {/* renders ingredients */}
-      <h2>Ingredients</h2>
-      <ul>
-        {recipe_ingredients?.map((i) => (
-          <li
-          key={i.documentId}>
-          {i?.ingredient?.ingredient_name} {i?.quantity} {i?.unit}
-          </li>
-        ))}
-      </ul>
-
-      {/* renders steps */}
-      <h2>Instructions</h2>
-      <ul>
-        {instructions.map((i) => (
-          <li
-          key={i.documentId}>
-            {i.step_number}. {i.instruction}
-          </li>
-        ))}
-      </ul>
 
       {/* renders comments */}
       <h2>Comments</h2>

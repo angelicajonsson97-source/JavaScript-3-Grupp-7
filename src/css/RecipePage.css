@@ -1,5 +1,5 @@
 :root {
-  --fir-bac: #B7B3A1;
+  --fir-bac: #dad7ca;
   --sec-bac: #D1CA98;
   --first-bac: #EDBF85;
   --text: #7B3E19;
@@ -24,7 +24,7 @@ p {
   padding: 0 20px;
 }
 button {
-  background-color: var(--fir-bac);
+  background-color: #dad7ca;
   color: var(--text);
   border: none;
   padding: 5px 10px;
@@ -63,7 +63,7 @@ ul:nth-of-type(1) li {
 
 /* Style for the instructions field */
 ul:nth-of-type(2) {
-  background-color: var(--fir-bac);
+  background-color: #dad7ca;
   padding: 25px;
   border-radius: 8px;
   width: 90%;

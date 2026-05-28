@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import RecipePage1 from '../pages/RecipePage1';
+import RecipePage1 from '../pages/RecipePage';
 
 describe('RecipePage', () => { 
 
