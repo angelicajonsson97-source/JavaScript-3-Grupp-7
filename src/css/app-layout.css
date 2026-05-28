@@ -255,8 +255,7 @@ textarea:focus {
 
 /* ── Login page ─────────────────────────────────────────── */
 .login-page {
-  position: fixed;
-  inset: 0;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
