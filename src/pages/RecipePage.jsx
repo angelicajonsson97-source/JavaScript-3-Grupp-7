@@ -323,6 +323,10 @@ export default function RecipePage() {
     <>
       <h1>{title}</h1>
 
+      <img
+        src={`http://localhost:1337${recipe.image_url?.url}`}
+      />
+
       <p>Rating: {
         loadingAV ?
           "..."
