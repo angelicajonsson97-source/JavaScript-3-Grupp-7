@@ -191,7 +191,7 @@ export default function StartPage() {
 
                 {recipe.image_url && (
                   <img
-                    src={recipe.image_url}
+                    src={`http://localhost:1337${recipe.image_url?.url}`}
                     alt={recipe.title}
                     className="featured-image"
                   />
@@ -232,14 +232,6 @@ export default function StartPage() {
             >
               <div className="most-liked-card-content">
                 <h3>{recipe.title}</h3>
-                {recipe.image_url && (
-                  <img
-                    src={recipe.image_url}
-                    alt={recipe.title}
-                    className="most-liked-image"
-                  />
-                )}
-
                 <div className="recipe-meta">
                   <span>⏱ {recipe.cook_time_minutes} min</span>
                   <span> • </span>
