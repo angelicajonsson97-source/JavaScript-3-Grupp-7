@@ -23,6 +23,8 @@ export default function useRecipe(slug) {
           + `&populate[recipe_steps][sort][0]=step_number:asc` //sorts by step using strapi
           + `&populate[recipe_ingredients][populate]=ingredient`
           + `&populate[categories][populate]=*`
+          + `&populate[image_url][populate]=*`
+
         );
 
         if (!res.ok) {
