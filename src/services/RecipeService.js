@@ -1,9 +1,14 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:1337";
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("jwt");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 const post = async (path, body, isFormData = false) => {
   const res = await fetch(`${API_BASE_URL}/api/${path}`, {
     method: "POST",
-    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: isFormData ? body : JSON.stringify({ data: body }),
   });
   const json = await res.json();
@@ -28,6 +33,7 @@ export const fetchIngredients = async () => {
 
 /* ── Create ── */
 
+// Creates a category with the given name and generating a random slug
 export const createCategory = async (name) => {
   const slug = name
     .toLowerCase()
@@ -40,6 +46,7 @@ export const createIngredient = async (name) => {
   return post("ingredients", { ingredient_name: name });
 };
 
+// Creates a recipe-ingredient relation and connecting an ingredient to a recipe with quantity and unit
 export const createRecipeIngredient = async ({
   ingredientId,
   quantity,
@@ -48,15 +55,17 @@ export const createRecipeIngredient = async ({
   return post("recipe-ingredients", {
     quantity: quantity ? Number(quantity) : null,
     unit,
-    ingredient: Number(ingredientId),
+    ingredient: { connect: [{ documentId: ingredientId }] },
   });
 };
 
+// Uploads an image file and returns the Strapi media library ID
 export const uploadImage = async (file) => {
   const form = new FormData();
   form.append("files", file);
   const res = await fetch(`${API_BASE_URL}/api/upload`, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: form,
   });
   const json = await res.json();
@@ -65,6 +74,7 @@ export const uploadImage = async (file) => {
   return json[0].id;
 };
 
+// Creates a recipe step and uploading an image if there is one and returns the created step
 export const createRecipeStep = async (step) => {
   const data = {
     step_number: step.step_number ? Number(step.step_number) : null,
@@ -76,6 +86,7 @@ export const createRecipeStep = async (step) => {
   return post("recipe-steps", data);
 };
 
+// Creates a recipe with the given payload and optional image file and generating a random slug
 export const createRecipe = async (payload, imageFile) => {
   if (imageFile) {
     payload.image_url = await uploadImage(imageFile);
