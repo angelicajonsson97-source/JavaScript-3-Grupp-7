@@ -103,3 +103,8 @@ export async function createComment(recipeId, content) {
 export async function deleteComment(id) {
   return request(`/comments/${id}`, { method: 'DELETE' })
 }
+
+// Amir Hemmatnia — Anropar vår custom route i backend för att hämta dashboard-statistik till adminpanelen
+export async function getAdminStats() {
+  return request('/recipes/admin-stats')
+}
