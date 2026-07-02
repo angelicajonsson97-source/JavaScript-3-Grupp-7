@@ -4,10 +4,11 @@ import {
   getUsers, deleteUser,
   getRecipes, deleteRecipe,
   getComments, deleteComment,
+  getAdminStats,
 } from '../services/strapiApi'
 
 // Amir Hemmatnia — Admin panel med flikar för användare, recept och kommentarer.
-// Kräver inloggad admin-användare (adminOnly via ProtectedRoute).
+// Kräver inloggad admin-avändare (adminOnly via ProtectedRoute).
 
 const TABS = ['Användare', 'Recept', 'Kommentarer']
 
@@ -18,6 +19,7 @@ export default function AdminPage() {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [stats, setStats] = useState(null)
 
   useEffect(() => {
     // active flag: förhindrar setState efter unmount (t.ex. snabb flikbyte = race condition)
@@ -48,6 +50,13 @@ export default function AdminPage() {
 
     return () => { active = false }
   }, [tab, query])
+
+  useEffect(() => {
+    // Hämta övergripande databas-statistik från vår custom endpoint när komponenten laddas
+    getAdminStats()
+      .then(res => setStats(res))
+      .catch(err => console.error('Failed to load stats', err))
+  }, [])
 
   function handleSearch(e) {
     e.preventDefault()
@@ -81,6 +90,26 @@ export default function AdminPage() {
           <h1>Adminpanel</h1>
           <p>Sök, granska och ta bort användare, recept och kommentarer.</p>
         </div>
+
+        {/* Visar statistikkorten om data har hämtats från vår custom stats-endpoint */}
+        {stats && (
+          <div className="admin-stats-container" style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+            <div className="stat-card" style={{ flex: 1, padding: '1rem', border: '1px solid #ccc', borderRadius: '4px', minWidth: '150px', backgroundColor: '#f9f9f9' }}>
+              <strong>Totala recept:</strong> {stats.totalRecipes}
+            </div>
+            <div className="stat-card" style={{ flex: 1, padding: '1rem', border: '1px solid #ccc', borderRadius: '4px', minWidth: '150px', backgroundColor: '#f9f9f9' }}>
+              <strong>Totala kommentarer:</strong> {stats.totalComments}
+            </div>
+            <div className="stat-card" style={{ flex: 1, padding: '1rem', border: '1px solid #ccc', borderRadius: '4px', minWidth: '150px', backgroundColor: '#f9f9f9' }}>
+              <strong>Registrerade användare:</strong> {stats.totalUsers}
+            </div>
+            {stats.mostActiveUsers?.length > 0 && (
+              <div className="stat-card" style={{ flex: 2, padding: '1rem', border: '1px solid #ccc', borderRadius: '4px', minWidth: '250px', backgroundColor: '#f9f9f9' }}>
+                <strong>Mest aktiva (kommentarer):</strong> {stats.mostActiveUsers.map(u => `${u.username} (${u.commentsCount})`).join(', ')}
+              </div>
+            )}
+          </div>
+        )}
 
         <form className="search-bar" onSubmit={handleSearch}>
           <input

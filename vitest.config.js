@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   test: {
+    globals: true,
     // jsdom gives us a fake DOM (document, window, ...) so React can
     // render into a virtual page instead of a real browser
     environment: 'jsdom',
